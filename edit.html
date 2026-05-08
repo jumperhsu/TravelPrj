@@ -67,6 +67,12 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
         button.outline {
             background: transparent;
             border: 1.5px solid #cbdde9;
@@ -95,7 +101,7 @@
             background: white;
             cursor: pointer;
         }
-        input {
+        input, textarea {
             width: 100%;
             padding: 8px 12px;
             border: 1.5px solid #e2e8f0;
@@ -103,17 +109,17 @@
             font-size: 0.85rem;
             background: white;
         }
-        input:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: #2c3e66;
             box-shadow: 0 0 0 3px rgba(44,62,102,0.15);
         }
+        input:disabled, textarea:disabled {
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
         textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 20px;
-            font-size: 0.85rem;
             font-family: monospace;
             resize: vertical;
         }
@@ -322,6 +328,13 @@
             padding: 2px 10px;
             margin-left: 8px;
         }
+        .lock-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
         @media (max-width: 640px) {
             body { padding: 0; }
             .panel { padding: 16px; border-radius: 0; }
@@ -414,7 +427,6 @@
     let allProjects = [];
     let currentProject = null;
     let currentEditProjectCode = null;
-    // 不再需要 tempNewMainItem，直接操作 currentProject
 
     function generateGuid() { return crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36); }
     function showToast(msg, isError = false) {
@@ -441,6 +453,8 @@
                     projectCode: proj.projectCode,
                     projectName: proj.projectName,
                     archived: proj.archived || false,
+                    locked: proj.locked || false,
+                    theme: proj.theme || 'default',
                     mainItems: proj.mainItems || []
                 };
             }
@@ -462,6 +476,8 @@
                 allProjects = Object.values(data);
                 allProjects.forEach(proj => {
                     if (proj.archived === undefined) proj.archived = false;
+                    if (proj.locked === undefined) proj.locked = false;
+                    if (!proj.theme) proj.theme = 'default';
                     if (!proj.mainItems) proj.mainItems = [];
                     proj.mainItems.forEach(item => {
                         if (!item.subItems) item.subItems = [];
@@ -489,6 +505,8 @@
             if (found) {
                 currentProject = JSON.parse(JSON.stringify(found));
                 if (!currentProject.mainItems) currentProject.mainItems = [];
+                if (currentProject.locked === undefined) currentProject.locked = false;
+                if (!currentProject.theme) currentProject.theme = 'default';
                 currentProject.mainItems.forEach(item => {
                     if (!item.subItems) item.subItems = [];
                 });
@@ -500,12 +518,13 @@
                 document.getElementById('editorContent').innerHTML = '<div class="empty-msg">請選擇專案</div>';
             }
         } else if (allProjects.length > 0 && !currentProject) {
-            // 預設選第一個未歸檔，若沒有則選第一個
             const firstUnarchived = allProjects.find(p => !p.archived);
             const target = firstUnarchived || allProjects[0];
             currentEditProjectCode = target.projectCode;
             currentProject = JSON.parse(JSON.stringify(target));
             if (!currentProject.mainItems) currentProject.mainItems = [];
+            if (currentProject.locked === undefined) currentProject.locked = false;
+            if (!currentProject.theme) currentProject.theme = 'default';
             currentProject.mainItems.forEach(item => { if (!item.subItems) item.subItems = []; });
             renderEditorForm();
             const select = document.getElementById('projectSelect');
@@ -521,7 +540,6 @@
         const select = document.getElementById('projectSelect');
         if (!select) return;
         select.innerHTML = '<option value="">-- 選擇專案 --</option>';
-        // 排序：未歸檔在前，已歸檔在後
         const unarchived = allProjects.filter(p => !p.archived);
         const archived = allProjects.filter(p => p.archived);
         const addGroup = (list, label) => {
@@ -531,7 +549,10 @@
             list.forEach(proj => {
                 const option = document.createElement('option');
                 option.value = proj.projectCode;
-                option.textContent = proj.projectName + (proj.archived ? ' (已歸檔)' : '');
+                let name = proj.projectName;
+                if (proj.locked) name += ' 🔒';
+                if (proj.archived) name += ' (已歸檔)';
+                option.textContent = name;
                 optgroup.appendChild(option);
             });
             select.appendChild(optgroup);
@@ -552,9 +573,8 @@
             return;
         }
         container.innerHTML = unarchived.map(proj => 
-            `<span class="project-chip" data-project-code="${proj.projectCode}">📌 ${escapeHtml(proj.projectName)}</span>`
+            `<span class="project-chip" data-project-code="${proj.projectCode}">📌 ${escapeHtml(proj.projectName)}${proj.locked ? ' 🔒' : ''}</span>`
         ).join('');
-        // 綁定點擊事件
         document.querySelectorAll('.project-chip').forEach(chip => {
             chip.addEventListener('click', (e) => {
                 const code = chip.dataset.projectCode;
@@ -569,6 +589,8 @@
             currentEditProjectCode = projectCode;
             currentProject = JSON.parse(JSON.stringify(target));
             if (!currentProject.mainItems) currentProject.mainItems = [];
+            if (currentProject.locked === undefined) currentProject.locked = false;
+            if (!currentProject.theme) currentProject.theme = 'default';
             currentProject.mainItems.forEach(item => {
                 if (!item.subItems) item.subItems = [];
             });
@@ -579,11 +601,15 @@
     }
 
     async function deleteCurrentProject() {
-        if (!currentEditProjectCode) {
+        if (!currentEditProjectCode || !currentProject) {
             showToast("請先選擇一個專案", true);
             return;
         }
-        if (confirm(`確定刪除專案「${currentProject?.projectName}」？`)) {
+        if (currentProject.locked) {
+            showToast("🔒 專案已鎖定，請先解鎖後再刪除", true);
+            return;
+        }
+        if (confirm(`確定刪除專案「${currentProject.projectName}」？`)) {
             await deleteProjectByCode(currentEditProjectCode);
         }
     }
@@ -600,25 +626,71 @@
         showToast("已刪除");
     }
 
-    // 切換歸檔狀態
     async function toggleArchiveCurrent() {
         if (!currentEditProjectCode || !currentProject) {
             showToast("請先選擇專案", true);
             return;
         }
+        if (currentProject.locked) {
+            showToast("🔒 專案已鎖定，無法變更歸檔狀態", true);
+            return;
+        }
         currentProject.archived = !currentProject.archived;
-        // 更新 allProjects
         const idx = allProjects.findIndex(p => p.projectCode === currentEditProjectCode);
         if (idx !== -1) allProjects[idx] = JSON.parse(JSON.stringify(currentProject));
         renderProjectSelect();
         renderUnarchivedChips();
         await saveAllProjectsToDB();
         showToast(currentProject.archived ? "已歸檔" : "已取消歸檔");
-        // 重新渲染編輯器標題可顯示歸檔狀態，但不必重繪
+    }
+
+    // ---------- 鎖定 / 解鎖 ----------
+    async function toggleLock() {
+        if (!currentProject || !currentEditProjectCode) return;
+        // 先同步表單當前內容，避免丟失修改
+        syncFormToCurrentProject();
+        currentProject.locked = !currentProject.locked;
+        const idx = allProjects.findIndex(p => p.projectCode === currentEditProjectCode);
+        if (idx !== -1) allProjects[idx] = JSON.parse(JSON.stringify(currentProject));
+        await saveAllProjectsToDB();
+        showToast(currentProject.locked ? "🔒 已鎖定，禁止編輯與刪除" : "🔓 已解鎖，可編輯");
+        renderEditorForm();
+        renderProjectSelect();
+        renderUnarchivedChips();
+    }
+
+    // ---------- 切換主題風格 ----------
+    async function updateProjectTheme(newTheme) {
+        if (!currentProject || !currentEditProjectCode) return;
+        // 同步表單後再切換，確保資料一致
+        syncFormToCurrentProject();
+        currentProject.theme = newTheme;
+        const idx = allProjects.findIndex(p => p.projectCode === currentEditProjectCode);
+        if (idx !== -1) allProjects[idx] = JSON.parse(JSON.stringify(currentProject));
+        await saveAllProjectsToDB();
+        showToast(`🎨 檢視風格已設為「${getThemeName(newTheme)}」`);
+        // 無須重新渲染整個編輯器，但為求 UI 一致仍更新下拉選單
+        const select = document.getElementById('themeSelect');
+        if (select) select.value = newTheme;
+    }
+
+    function getThemeName(theme) {
+        const map = {
+            default: '預設 (藍灰)',
+            ocean: '海洋 (青藍)',
+            forest: '森林 (翠綠)',
+            sunset: '日落 (暖橘)',
+            night: '暗夜 (深色)'
+        };
+        return map[theme] || theme;
     }
 
     // ---------- 批次匯入功能 ----------
     function showBatchImportModal() {
+        if (currentProject && currentProject.locked) {
+            showToast("🔒 專案已鎖定，無法匯入", true);
+            return;
+        }
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
@@ -662,6 +734,10 @@
 
     function importBatchData(text) {
         if (!currentProject) { showToast("請先選擇一個專案", true); return; }
+        if (currentProject.locked) {
+            showToast("🔒 專案已鎖定，無法匯入", true);
+            return;
+        }
         const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
         let i = 0;
         let currentMainItem = null;
@@ -739,18 +815,21 @@
 
     // ---------- 排序輔助 ----------
     function moveMainItemUp(index) {
+        if (currentProject.locked) return; // 鎖定禁止排序
         if (index > 0) {
             [currentProject.mainItems[index-1], currentProject.mainItems[index]] = [currentProject.mainItems[index], currentProject.mainItems[index-1]];
             renderEditorForm();
         }
     }
     function moveMainItemDown(index) {
+        if (currentProject.locked) return;
         if (index < currentProject.mainItems.length - 1) {
             [currentProject.mainItems[index+1], currentProject.mainItems[index]] = [currentProject.mainItems[index], currentProject.mainItems[index+1]];
             renderEditorForm();
         }
     }
     function moveSubItemUp(mainIndex, subIndex) {
+        if (currentProject.locked) return;
         const subItems = currentProject.mainItems[mainIndex].subItems;
         if (subIndex > 0) {
             [subItems[subIndex-1], subItems[subIndex]] = [subItems[subIndex], subItems[subIndex-1]];
@@ -758,6 +837,7 @@
         }
     }
     function moveSubItemDown(mainIndex, subIndex) {
+        if (currentProject.locked) return;
         const subItems = currentProject.mainItems[mainIndex].subItems;
         if (subIndex < subItems.length - 1) {
             [subItems[subIndex+1], subItems[subIndex]] = [subItems[subIndex], subItems[subIndex+1]];
@@ -771,7 +851,6 @@
         const nameInput = document.getElementById('editProjectName');
         if (nameInput) currentProject.projectName = nameInput.value;
 
-        // 遍歷所有主項目卡片
         document.querySelectorAll('.main-item-card').forEach(card => {
             const mainId = card.dataset.id;
             const mainItem = currentProject.mainItems.find(m => m.id === mainId);
@@ -782,12 +861,8 @@
             if (linkField) {
                 const raw = linkField.value.trim();
                 mainItem.link = sanitizeUrl(raw);
-                if (raw && !mainItem.link) {
-                    // 無效連結不更新，保留原值，但提示
-                }
                 if (mainItem.link) mainItem.subItems = mainItem.subItems || [];
             }
-            // 子項目
             card.querySelectorAll('.sub-item-card').forEach(subCard => {
                 const subId = subCard.dataset.subId;
                 const subItem = mainItem.subItems.find(s => s.id === subId);
@@ -803,51 +878,76 @@
         });
     }
 
-    // ---------- 編輯表單渲染 (無儲存按鈕，直接綁定即時修改，但使用同步機制) ----------
+    // ---------- 編輯表單渲染 ----------
     function renderEditorForm() {
         if (!currentProject) return;
         const container = document.getElementById('editorContent');
         const mainItems = currentProject.mainItems || [];
+        const locked = currentProject.locked || false;
         const archivedBadge = currentProject.archived ? '<span class="archived-tag">📦 已歸檔</span>' : '';
+        const theme = currentProject.theme || 'default';
 
         container.innerHTML = `
             <div style="margin-bottom: 28px;">
-                <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                     <label style="font-weight:500;">專案名稱</label>
-                    <input type="text" id="editProjectName" value="${escapeHtml(currentProject.projectName)}" placeholder="輸入專案名稱" style="flex:1;">
+                    <input type="text" id="editProjectName" value="${escapeHtml(currentProject.projectName)}" ${locked ? 'disabled' : ''} placeholder="輸入專案名稱" style="flex:1; min-width:180px;">
                     ${archivedBadge}
+                    <button id="lockToggleBtn" class="outline small" title="${locked ? '解鎖以編輯' : '鎖定禁止修改'}">
+                        ${locked ? '🔒 鎖定中' : '🔓 未鎖定'}
+                    </button>
                 </div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
+                    <label style="font-weight:500;">🎨 檢視風格</label>
+                    <select id="themeSelect" ${locked ? 'disabled' : ''} style="max-width: 220px;">
+                        <option value="default" ${theme === 'default' ? 'selected' : ''}>預設 (藍灰)</option>
+                        <option value="ocean" ${theme === 'ocean' ? 'selected' : ''}>海洋 (青藍)</option>
+                        <option value="forest" ${theme === 'forest' ? 'selected' : ''}>森林 (翠綠)</option>
+                        <option value="sunset" ${theme === 'sunset' ? 'selected' : ''}>日落 (暖橘)</option>
+                        <option value="night" ${theme === 'night' ? 'selected' : ''}>暗夜 (深色)</option>
+                    </select>
+                </div>
+                ${locked ? '<div style="margin-top:10px; color:#b91c1c;" class="lock-indicator">🔒 此專案已鎖定，禁止編輯、刪除與排序。</div>' : ''}
             </div>
             <div class="flex-row" style="justify-content: space-between; margin-bottom: 16px;">
                 <h3>📂 主項目</h3>
-                <button id="addMainItemBtn" class="small">➕ 新增主項目</button>
+                ${!locked ? '<button id="addMainItemBtn" class="small">➕ 新增主項目</button>' : ''}
             </div>
             <div id="mainItemsList">
-                ${mainItems.map((item, idx) => renderMainItemCard(item, idx)).join('')}
+                ${mainItems.map((item, idx) => renderMainItemCard(item, idx, locked)).join('')}
             </div>
         `;
 
-        // 綁定新增主項目
-        document.getElementById('addMainItemBtn').addEventListener('click', () => {
-            const newMain = {
-                id: generateGuid(),
-                name: "新主項目",
-                link: "",
-                subItems: []
-            };
-            currentProject.mainItems.push(newMain);
-            renderEditorForm();
-            // 自動展開新項目
-            setTimeout(() => {
-                const newCard = document.querySelector(`.main-item-card[data-id="${newMain.id}"]`);
-                if (newCard) {
-                    newCard.querySelector('.main-item-detail')?.classList.add('expanded');
-                    newCard.querySelector('.main-item-header')?.style.setProperty('border-bottom', '1px solid #eef2fa');
-                }
-            }, 50);
+        // 鎖定按鈕事件
+        document.getElementById('lockToggleBtn')?.addEventListener('click', toggleLock);
+
+        // 主題選擇事件
+        document.getElementById('themeSelect')?.addEventListener('change', (e) => {
+            updateProjectTheme(e.target.value);
         });
 
-        // 主項目頭部點擊展開/收合
+        // 只有未鎖定時才綁定新增主項目按鈕
+        if (!locked) {
+            document.getElementById('addMainItemBtn')?.addEventListener('click', () => {
+                const newMain = {
+                    id: generateGuid(),
+                    name: "新主項目",
+                    link: "",
+                    subItems: []
+                };
+                currentProject.mainItems.push(newMain);
+                renderEditorForm();
+                setTimeout(() => {
+                    const newCard = document.querySelector(`.main-item-card[data-id="${newMain.id}"]`);
+                    if (newCard) {
+                        newCard.querySelector('.main-item-detail')?.classList.add('expanded');
+                        newCard.querySelector('.main-item-header')?.style.setProperty('border-bottom', '1px solid #eef2fa');
+                    }
+                }, 50);
+            });
+        }
+
+        // 主項目頭部展開/收合
         document.querySelectorAll('.main-item-header').forEach(header => {
             header.addEventListener('click', (e) => {
                 if (e.target.closest('.action-buttons')) return;
@@ -858,7 +958,7 @@
             });
         });
 
-        // 刪除主項目
+        // 刪除主項目 (鎖定時按鈕不存在)
         document.querySelectorAll('.delete-main-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -868,7 +968,7 @@
             });
         });
 
-        // 排序主項目
+        // 排序主項目 (鎖定時按鈕可能 disabled，但仍綁定無妨)
         document.querySelectorAll('.move-up-main').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -884,7 +984,7 @@
             });
         });
 
-        // 新增子項目
+        // 新增子項目 (鎖定時按鈕不存在)
         document.querySelectorAll('.add-subitem-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -952,7 +1052,7 @@
         });
     }
 
-    function renderMainItemCard(item, idx) {
+    function renderMainItemCard(item, idx, locked = false) {
         const hasLink = item.link && item.link.trim() !== "";
         return `
             <div class="main-item-card" data-id="${item.id}">
@@ -962,31 +1062,33 @@
                         ${hasLink ? `<span class="badge">🔗 有連結</span>` : `<span class="badge">📎 可設子項目</span>`}
                     </div>
                     <div class="action-buttons flex-row" style="gap: 6px;">
+                        ${!locked ? `
                         <div class="sort-buttons">
                             <button class="small move-up-main" data-idx="${idx}" ${idx === 0 ? 'disabled style="opacity:0.5;"' : ''}>▲</button>
                             <button class="small move-down-main" data-idx="${idx}" ${idx === currentProject.mainItems.length-1 ? 'disabled style="opacity:0.5;"' : ''}>▼</button>
                         </div>
                         <button class="small danger delete-main-btn" data-id="${item.id}">🗑️</button>
+                        ` : ''}
                     </div>
                 </div>
                 <div class="main-item-detail">
                     <div class="main-item-fields" style="display: flex; gap: 12px; margin-bottom: 16px;">
                         <div class="field" style="flex: 1;">
                             <label>主項目名稱</label>
-                            <input type="text" class="main-name-input" data-id="${item.id}" value="${escapeHtml(item.name)}">
+                            <input type="text" class="main-name-input" data-id="${item.id}" value="${escapeHtml(item.name)}" ${locked ? 'disabled' : ''}>
                         </div>
                         <div class="field" style="flex: 1;">
                             <label>連結 (需以 http:// 或 https:// 開頭，留空則可新增子項目)</label>
-                            <input type="text" class="main-link-input" data-id="${item.id}" value="${escapeHtml(item.link)}" placeholder="https://...">
+                            <input type="text" class="main-link-input" data-id="${item.id}" value="${escapeHtml(item.link)}" placeholder="https://..." ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                     <div style="margin-top: 12px;">
                         <div class="flex-row" style="justify-content: space-between; margin-bottom: 8px;">
                             <strong>📂 子項目</strong>
-                            <button class="small add-subitem-btn" data-mid="${item.id}">➕ 新增子項目</button>
+                            ${!locked ? `<button class="small add-subitem-btn" data-mid="${item.id}">➕ 新增子項目</button>` : ''}
                         </div>
                         <div class="sub-item-list">
-                            ${(item.subItems || []).map((sub, subIdx) => renderSubItemCard(item.id, sub, subIdx, idx)).join('') || '<div class="empty-msg" style="padding:12px;">無子項目</div>'}
+                            ${(item.subItems || []).map((sub, subIdx) => renderSubItemCard(item.id, sub, subIdx, idx, locked)).join('') || '<div class="empty-msg" style="padding:12px;">無子項目</div>'}
                         </div>
                     </div>
                 </div>
@@ -994,30 +1096,32 @@
         `;
     }
 
-    function renderSubItemCard(mainId, sub, subIdx, mainIdx) {
+    function renderSubItemCard(mainId, sub, subIdx, mainIdx, locked = false) {
         return `
             <div class="sub-item-card" data-sub-id="${sub.id}">
                 <div class="sub-item-header">
                     <div class="flex-row" style="gap: 8px;">
                         <span class="title">📎 ${escapeHtml(sub.name)}</span>
+                        ${!locked ? `
                         <div class="sort-buttons">
                             <button class="small move-up-sub" data-main-idx="${mainIdx}" data-sub-idx="${subIdx}" ${subIdx === 0 ? 'disabled style="opacity:0.5;"' : ''}>▲</button>
                             <button class="small move-down-sub" data-main-idx="${mainIdx}" data-sub-idx="${subIdx}" ${subIdx === (currentProject.mainItems[mainIdx]?.subItems?.length-1) ? 'disabled style="opacity:0.5;"' : ''}>▼</button>
                         </div>
+                        ` : ''}
                     </div>
                     <div class="action-buttons flex-row" style="gap: 4px;">
-                        <button class="small danger delete-sub-btn" data-mid="${mainId}" data-sid="${sub.id}">🗑️</button>
+                        ${!locked ? `<button class="small danger delete-sub-btn" data-mid="${mainId}" data-sid="${sub.id}">🗑️</button>` : ''}
                     </div>
                 </div>
                 <div class="sub-item-detail">
                     <div class="sub-item-fields" style="display: flex; gap: 12px; margin-bottom: 12px;">
                         <div class="field" style="flex: 1;">
                             <label>子項目名稱</label>
-                            <input type="text" class="sub-name-input" data-mid="${mainId}" data-sid="${sub.id}" value="${escapeHtml(sub.name)}">
+                            <input type="text" class="sub-name-input" data-mid="${mainId}" data-sid="${sub.id}" value="${escapeHtml(sub.name)}" ${locked ? 'disabled' : ''}>
                         </div>
                         <div class="field" style="flex: 1;">
                             <label>連結 (需以 http:// 或 https:// 開頭)</label>
-                            <input type="text" class="sub-link-input" data-mid="${mainId}" data-sid="${sub.id}" value="${escapeHtml(sub.link)}" placeholder="https://...">
+                            <input type="text" class="sub-link-input" data-mid="${mainId}" data-sid="${sub.id}" value="${escapeHtml(sub.link)}" placeholder="https://..." ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                 </div>
@@ -1027,7 +1131,10 @@
 
     async function saveCurrentProject() {
         if (!currentProject || !currentEditProjectCode) return;
-        // 同步表單資料
+        if (currentProject.locked) {
+            showToast("🔒 專案已鎖定，無法儲存修改", true);
+            return;
+        }
         syncFormToCurrentProject();
         const index = allProjects.findIndex(p => p.projectCode === currentEditProjectCode);
         if (index !== -1) allProjects[index] = JSON.parse(JSON.stringify(currentProject));
@@ -1040,7 +1147,7 @@
 
     async function createNewProject() {
         const newCode = generateGuid();
-        const newProject = { projectCode: newCode, projectName: "新專案", archived: false, mainItems: [] };
+        const newProject = { projectCode: newCode, projectName: "新專案", archived: false, locked: false, theme: 'default', mainItems: [] };
         allProjects.push(newProject);
         currentEditProjectCode = newCode;
         currentProject = JSON.parse(JSON.stringify(newProject));
@@ -1060,7 +1167,7 @@
                 <div style="margin:16px 0">🤖 DeepSeek · 🔥 Firebase</div>
                 <p>構想：jumper.hsu@gmail.com</p>
                 <p>設計：DeepSeek</p>
-                <p>版次：20260326.02 (歸檔/匯出/簡化儲存)</p>
+                <p>版次：20260326.02 (鎖定/主題風格)</p>
                 <button id="closeAboutBtn" class="outline small" style="margin-top:16px;">關閉</button>
             </div>
         `;
@@ -1077,7 +1184,13 @@
     window.onload = async () => {
         document.getElementById('addNewProjectBtn')?.addEventListener('click', createNewProject);
         document.getElementById('saveCurrentProjectBtn')?.addEventListener('click', saveCurrentProject);
-        document.getElementById('batchImportBtn')?.addEventListener('click', showBatchImportModal);
+        document.getElementById('batchImportBtn')?.addEventListener('click', () => {
+            if (currentProject?.locked) {
+                showToast("🔒 專案已鎖定，無法匯入", true);
+                return;
+            }
+            showBatchImportModal();
+        });
         document.getElementById('batchExportBtn')?.addEventListener('click', exportBatchData);
         document.getElementById('toggleArchiveBtn')?.addEventListener('click', toggleArchiveCurrent);
         document.getElementById('viewSelectedProjectBtn')?.addEventListener('click', () => {
