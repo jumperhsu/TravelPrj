@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>專案檢視模式</title>
+    <title>專案檢視模式 - 智慧記憶</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
@@ -118,7 +118,6 @@
             --modal-bg: #1e293b;
             --button-outline-border: #64748b;
             --button-outline-text: #cbd5e1;
-            /* 暗夜模式下的按鈕 hover 等可再微調，此處保留基本 */
         }
 
         body {
@@ -331,26 +330,64 @@
         loadProject(projectCode);
     }
 
+    // ---------- 記憶工具 (使用 localStorage, 依照專案代碼區分) ----------
+    function getStorageKey(projectCode, type) {
+        return `viewer_memory_${projectCode}_${type}`;
+    }
+
+    function saveMainTabMemory(projectCode, mainItemId) {
+        if (!projectCode || !mainItemId) return;
+        try {
+            localStorage.setItem(getStorageKey(projectCode, 'mainTab'), mainItemId);
+        } catch(e) { console.warn(e); }
+    }
+
+    function getMainTabMemory(projectCode) {
+        if (!projectCode) return null;
+        try {
+            return localStorage.getItem(getStorageKey(projectCode, 'mainTab'));
+        } catch(e) { return null; }
+    }
+
+    function saveSubTabMemory(projectCode, subItemId) {
+        if (!projectCode || !subItemId) return;
+        try {
+            localStorage.setItem(getStorageKey(projectCode, 'subTab'), subItemId);
+        } catch(e) { console.warn(e); }
+    }
+
+    function getSubTabMemory(projectCode) {
+        if (!projectCode) return null;
+        try {
+            return localStorage.getItem(getStorageKey(projectCode, 'subTab'));
+        } catch(e) { return null; }
+    }
+
     async function loadProject(code) {
         try {
             const snapshot = await db.ref('projects/' + code).once('value');
             const data = snapshot.val();
             if (!data) throw new Error('專案不存在');
 
-            // ---- 套用專案設定的主題 ----
+            // 套用主題
             const theme = data.theme || 'default';
             document.documentElement.setAttribute('data-theme', theme);
 
             document.getElementById('viewerTitle').innerText = data.projectName || '未命名';
             document.title = data.projectName || '專案檢視';
-            renderTabs(data.mainItems || []);
+            
+            // 取得主選單資料
+            const mainItems = data.mainItems || [];
+            
+            // 渲染並嘗試恢復記憶的頁籤
+            renderTabsWithMemory(code, mainItems);
         } catch (err) {
             document.getElementById('viewerTitle').innerText = '載入失敗';
             document.getElementById('contentIframe').srcdoc = `<html><body>❌ ${err.message}</body></html>`;
         }
     }
 
-    function renderTabs(mainItems) {
+    function renderTabsWithMemory(projectCode, mainItems) {
         const mainTabsDiv = document.getElementById('mainTabs');
         const subTabsWrapper = document.getElementById('subTabsWrapper');
         const subTabsDiv = document.getElementById('subTabs');
@@ -359,66 +396,143 @@
 
         function showLoading() { loading.style.display = 'flex'; }
         function hideLoading() { loading.style.display = 'none'; }
+        
         function loadUrl(url) {
             if (!url) {
-                iframe.srcdoc = "<html><body>無效連結</body></html>";
+                iframe.srcdoc = "<html><body style='background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;font-family:sans-serif;'>⚠️ 無效連結或無內容</body></html>";
                 hideLoading();
                 return;
             }
             showLoading();
-            iframe.onload = hideLoading;
+            iframe.onload = () => { hideLoading(); };
             iframe.onerror = () => {
-                iframe.srcdoc = `<html><body>⚠️ 無法載入連結</body></html>`;
+                iframe.srcdoc = `<html><body style='background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;'>⚠️ 無法載入連結</body></html>`;
                 hideLoading();
             };
             iframe.src = url;
         }
 
+        // 儲存主按鈕與子按鈕的引用映射，方便後續觸發點擊
+        const mainButtons = new Map(); // key: mainItemId, value: button element
+        const subButtonsMap = new Map(); // key: subItemId, value: button element (動態重建時會重新填充)
+
+        // 清空容器
         mainTabsDiv.innerHTML = '';
+        
+        // 建立主頁籤按鈕
         mainItems.forEach((item) => {
             const btn = document.createElement('button');
             btn.className = 'viewer-tab';
             btn.textContent = item.name;
             btn.dataset.id = item.id;
-            btn.addEventListener('click', () => {
+            btn.dataset.link = item.link || '';
+            mainButtons.set(item.id, btn);
+            
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // 切換主選單 active 狀態
                 document.querySelectorAll('.viewer-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                // 儲存記憶：主頁籤 id
+                saveMainTabMemory(projectCode, item.id);
+                
+                // 判斷是否有直接連結
                 if (item.link && item.link.trim()) {
+                    // 有直接連結: 隱藏子頁籤容器，載入連結，並清除子頁籤記憶 (因為沒有子頁籤可選)
                     subTabsWrapper.style.display = 'none';
+                    subTabsDiv.innerHTML = '';
                     loadUrl(item.link);
+                    // 清除子頁籤記憶 (因為主項目是直接連結，不具備子頁籤)
+                    saveSubTabMemory(projectCode, null);
                 } else {
+                    // 沒有直接連結: 顯示子選單
                     const subItems = item.subItems || [];
-                    if (subItems.length) {
-                        subTabsWrapper.style.display = 'block';
-                        subTabsDiv.innerHTML = '';
+                    subTabsWrapper.style.display = 'block';
+                    subTabsDiv.innerHTML = '';
+                    subButtonsMap.clear();
+                    
+                    if (subItems.length === 0) {
+                        // 無子項目，顯示提示並清空 iframe
+                        const emptyMsg = document.createElement('div');
+                        emptyMsg.style.padding = '8px';
+                        emptyMsg.style.color = 'var(--text-sub-tab-inactive)';
+                        emptyMsg.innerText = '📂 此主項目無子項目';
+                        subTabsDiv.appendChild(emptyMsg);
+                        loadUrl(null);
+                        saveSubTabMemory(projectCode, null);
+                    } else {
+                        // 建立子項目按鈕
+                        let firstValidSub = null;
                         subItems.forEach(sub => {
                             const subBtn = document.createElement('button');
                             subBtn.className = 'viewer-sub-tab';
                             subBtn.textContent = sub.name;
                             subBtn.dataset.id = sub.id;
-                            subBtn.addEventListener('click', () => {
+                            subBtn.dataset.link = sub.link || '';
+                            subButtonsMap.set(sub.id, subBtn);
+                            
+                            subBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                // 移除其他子項目的 active 狀態
                                 document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
                                 subBtn.classList.add('active');
+                                // 記憶子頁籤 id
+                                saveSubTabMemory(projectCode, sub.id);
+                                // 載入子頁籤連結
                                 loadUrl(sub.link);
                             });
                             subTabsDiv.appendChild(subBtn);
+                            if (!firstValidSub) firstValidSub = subBtn;
                         });
-                        const firstSub = subTabsDiv.querySelector('.viewer-sub-tab');
-                        if (firstSub) firstSub.click();
-                    } else {
-                        subTabsWrapper.style.display = 'block';
-                        subTabsDiv.innerHTML = '<div style="padding:8px;">此主項目無子項目</div>';
-                        loadUrl(null);
+                        
+                        // 嘗試恢復此主項目下的子頁籤記憶
+                        const rememberedSubId = getSubTabMemory(projectCode);
+                        let targetSubBtn = null;
+                        if (rememberedSubId && subButtonsMap.has(rememberedSubId)) {
+                            targetSubBtn = subButtonsMap.get(rememberedSubId);
+                        }
+                        if (targetSubBtn) {
+                            // 點擊記憶的子頁籤
+                            targetSubBtn.click();
+                        } else if (firstValidSub) {
+                            // 無記憶或記憶無效，點擊第一個
+                            firstValidSub.click();
+                        } else {
+                            loadUrl(null);
+                        }
                     }
                 }
             });
             mainTabsDiv.appendChild(btn);
         });
-        if (mainTabsDiv.firstChild) mainTabsDiv.firstChild.click();
+        
+        // 主頁籤記憶恢復邏輯
+        const rememberedMainId = getMainTabMemory(projectCode);
+        let targetMainBtn = null;
+        if (rememberedMainId && mainButtons.has(rememberedMainId)) {
+            targetMainBtn = mainButtons.get(rememberedMainId);
+        }
+        
+        if (targetMainBtn) {
+            // 如果找到記憶的主頁籤，直接觸發點擊事件（會自動處理子頁籤邏輯）
+            targetMainBtn.click();
+        } else {
+            // 否則點擊第一個主頁籤（若存在）
+            const firstMain = mainTabsDiv.querySelector('.viewer-tab');
+            if (firstMain) {
+                firstMain.click();
+            } else {
+                // 完全沒有任何主頁籤，顯示空白訊息
+                subTabsWrapper.style.display = 'none';
+                loadUrl(null);
+            }
+        }
     }
 
-    // 關於彈窗
+    // 關於彈窗（優化樣式，適應主題色）
     function showAboutModal() {
+        // 避免重複產生多個 modal
+        if (document.querySelector('.modal')) return;
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
@@ -428,16 +542,20 @@
                     <span style="font-weight:500;">🤖 DeepSeek</span>
                     <span style="font-weight:500;">🔥 Firebase</span>
                 </div>
-                <p>構想：<a href="mailto:jumper.hsu@gmail.com">jumper.hsu@gmail.com</a></p>
+                <p>構想：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
                 <p>設計：DeepSeek</p>
                 <p>資料庫：Firebase</p>
-                <p>版次：20260326.02 (主題支援)</p>
-                <button id="closeAboutBtn" class="outline small" style="margin-top: 16px;">關閉</button>
+                <p>版次：20260326.03 (智慧記憶頁籤及子頁籤)</p>
+                <button id="closeAboutBtn" class="outline" style="margin-top: 16px;">關閉</button>
             </div>
         `;
         document.body.appendChild(modal);
-        document.getElementById('closeAboutBtn').onclick = () => modal.remove();
-        // 按鈕樣式在彈窗內可能需要手動微調，但已套用變數基本可用
+        const closeBtn = document.getElementById('closeAboutBtn');
+        if (closeBtn) closeBtn.onclick = () => modal.remove();
+        // 點擊背景關閉
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
     }
     document.getElementById('aboutBtn').addEventListener('click', showAboutModal);
 </script>
