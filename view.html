@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>專案檢視模式 - 智慧記憶</title>
+    <title>專案檢視模式 | 智慧記憶</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
@@ -12,42 +12,50 @@
         /* ---------- 預設主題變數 (default) ---------- */
         :root,
         [data-theme="default"] {
-            --bg-body: #f5f7fb;
+            --bg-body: #f1f5f9;
             --bg-header: #ffffff;
             --border-header: #e2e8f0;
-            --text-header: #1e2f47;
-            --bg-tab-active: #2c3e66;
-            --text-tab-active: #ffffff;
-            --bg-tab-inactive: #f1f5f9;
+            --text-header: #0f172a;
+            /* 主頁籤樣式 (帶陰影) */
+            --bg-tab-inactive: #f8fafc;
             --text-tab-inactive: #334155;
+            --bg-tab-active: #1e293b;
+            --text-tab-active: #ffffff;
+            --tab-shadow: 0 2px 6px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            --tab-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.08);
+            /* 子頁籤樣式 (不同色系 - 柔和藍紫) */
             --bg-sub-wrapper: #f8fafc;
-            --border-sub: #e2edf2;
+            --border-sub: #e0e7ff;
             --bg-sub-tab-inactive: #eef2ff;
-            --text-sub-tab-inactive: #2c3e66;
-            --bg-sub-tab-active: #2c3e66;
+            --text-sub-tab-inactive: #4338ca;
+            --bg-sub-tab-active: #4f46e5;
             --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #e0e7ff;
             --iframe-bg: #eef2f6;
             --modal-bg: white;
-            --button-outline-border: #cbdde9;
-            --button-outline-text: #2c3e66;
+            --button-outline-border: #cbd5e1;
+            --button-outline-text: #1e293b;
         }
 
         /* ---------- 海洋主題 (ocean) ---------- */
         [data-theme="ocean"] {
-            --bg-body: #e0f2fe;
+            --bg-body: #d9f1ff;
             --bg-header: #ffffff;
-            --border-header: #bae6fd;
-            --text-header: #0369a1;
-            --bg-tab-active: #0284c7;
-            --text-tab-active: #ffffff;
+            --border-header: #b8e1fc;
+            --text-header: #0c4a6e;
             --bg-tab-inactive: #e0f2fe;
-            --text-tab-inactive: #0c4a6e;
+            --text-tab-inactive: #0369a1;
+            --bg-tab-active: #0284c7;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(2, 132, 199, 0.12);
+            --tab-shadow-hover: 0 6px 12px rgba(2, 132, 199, 0.18);
             --bg-sub-wrapper: #f0f9ff;
             --border-sub: #bae6fd;
             --bg-sub-tab-inactive: #dbeafe;
             --text-sub-tab-inactive: #1e40af;
-            --bg-sub-tab-active: #0284c7;
+            --bg-sub-tab-active: #0ea5e9;
             --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #c7e9ff;
             --iframe-bg: #e0f2fe;
             --modal-bg: white;
             --button-outline-border: #7dd3fc;
@@ -56,42 +64,48 @@
 
         /* ---------- 森林主題 (forest) ---------- */
         [data-theme="forest"] {
-            --bg-body: #ecfdf5;
+            --bg-body: #e6f7ec;
             --bg-header: #ffffff;
-            --border-header: #a7f3d0;
-            --text-header: #065f46;
-            --bg-tab-active: #059669;
-            --text-tab-active: #ffffff;
-            --bg-tab-inactive: #d1fae5;
-            --text-tab-inactive: #064e3b;
+            --border-header: #bbf7d0;
+            --text-header: #14532d;
+            --bg-tab-inactive: #dcfce7;
+            --text-tab-inactive: #15803d;
+            --bg-tab-active: #16a34a;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 6px rgba(22, 163, 74, 0.1);
+            --tab-shadow-hover: 0 6px 12px rgba(22, 163, 74, 0.15);
             --bg-sub-wrapper: #f0fdf4;
-            --border-sub: #a7f3d0;
-            --bg-sub-tab-inactive: #ccfbf1;
-            --text-sub-tab-inactive: #115e59;
+            --border-sub: #bbf7d0;
+            --bg-sub-tab-inactive: #d1fae5;
+            --text-sub-tab-inactive: #065f46;
             --bg-sub-tab-active: #059669;
             --text-sub-tab-active: white;
-            --iframe-bg: #d1fae5;
+            --bg-sub-tab-hover: #a7f3d0;
+            --iframe-bg: #dcfce7;
             --modal-bg: white;
-            --button-outline-border: #6ee7b7;
-            --button-outline-text: #065f46;
+            --button-outline-border: #86efac;
+            --button-outline-text: #166534;
         }
 
         /* ---------- 日落主題 (sunset) ---------- */
         [data-theme="sunset"] {
-            --bg-body: #fff7ed;
+            --bg-body: #fff3e6;
             --bg-header: #ffffff;
-            --border-header: #fed7aa;
-            --text-header: #9a3412;
-            --bg-tab-active: #ea580c;
-            --text-tab-active: #ffffff;
+            --border-header: #ffddb0;
+            --text-header: #7c2d12;
             --bg-tab-inactive: #ffedd5;
-            --text-tab-inactive: #7c2d12;
+            --text-tab-inactive: #c2410c;
+            --bg-tab-active: #ea580c;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
+            --tab-shadow-hover: 0 6px 12px rgba(234, 88, 12, 0.2);
             --bg-sub-wrapper: #fff7ed;
             --border-sub: #fed7aa;
             --bg-sub-tab-inactive: #ffedd5;
             --text-sub-tab-inactive: #9a3412;
-            --bg-sub-tab-active: #ea580c;
+            --bg-sub-tab-active: #f97316;
             --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #fed7aa;
             --iframe-bg: #ffedd5;
             --modal-bg: white;
             --button-outline-border: #fdba74;
@@ -100,20 +114,23 @@
 
         /* ---------- 暗夜主題 (night) ---------- */
         [data-theme="night"] {
-            --bg-body: #0f172a;
+            --bg-body: #0b1120;
             --bg-header: #1e293b;
             --border-header: #334155;
             --text-header: #e2e8f0;
-            --bg-tab-active: #475569;
-            --text-tab-active: #f1f5f9;
             --bg-tab-inactive: #334155;
             --text-tab-inactive: #cbd5e1;
+            --bg-tab-active: #475569;
+            --text-tab-active: #f1f5f9;
+            --tab-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            --tab-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.5);
             --bg-sub-wrapper: #1e293b;
-            --border-sub: #475569;
+            --border-sub: #334155;
             --bg-sub-tab-inactive: #334155;
-            --text-sub-tab-inactive: #e2e8f0;
-            --bg-sub-tab-active: #64748b;
-            --text-sub-tab-active: white;
+            --text-sub-tab-inactive: #a5f3fc;
+            --bg-sub-tab-active: #38bdf8;
+            --text-sub-tab-active: #0f172a;
+            --bg-sub-tab-hover: #475569;
             --iframe-bg: #0f172a;
             --modal-bg: #1e293b;
             --button-outline-border: #64748b;
@@ -121,96 +138,134 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg-body);
             height: 100vh;
             overflow: hidden;
-            transition: background 0.25s ease;
+            transition: background 0.2s ease;
         }
         .viewer-container {
             display: flex;
             flex-direction: column;
             height: 100%;
         }
+        /* 頭部區域微調 */
         .viewer-header {
             background: var(--bg-header);
-            padding: 12px 20px;
+            padding: 14px 24px;
             border-bottom: 1px solid var(--border-header);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            backdrop-filter: blur(2px);
         }
         .viewer-header h1 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: var(--text-header);
+            background: linear-gradient(135deg, var(--text-header) 0%, var(--bg-tab-active) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
         }
+        /* 主頁籤容器增加陰影區塊 + 圓潤感 */
         .viewer-tabs-wrapper {
             background: var(--bg-header);
             border-bottom: 1px solid var(--border-header);
             flex-shrink: 0;
-            padding: 0.5rem 1.25rem 0 1.25rem;
+            padding: 0.75rem 1.5rem 0 1.5rem;
+            position: relative;
+            z-index: 2;
         }
         .viewer-tabs-scroll {
             overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.6rem;
+            scrollbar-width: thin;
         }
         .viewer-tabs-list {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.7rem;
         }
+        /* 主頁籤按鈕：陰影、圓角更大、過渡 */
         .viewer-tab {
             background: var(--bg-tab-inactive);
             border: none;
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border-radius: 2rem;
+            padding: 0.6rem 1.3rem;
+            font-size: 0.9rem;
+            font-weight: 550;
+            border-radius: 40px;
             color: var(--text-tab-inactive);
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: var(--tab-shadow);
+            backdrop-filter: blur(2px);
+            letter-spacing: 0.3px;
+        }
+        .viewer-tab:hover {
+            transform: translateY(-1px);
+            background: color-mix(in srgb, var(--bg-tab-inactive) 85%, white);
+            box-shadow: var(--tab-shadow-hover);
         }
         .viewer-tab.active {
             background: var(--bg-tab-active);
             color: var(--text-tab-active);
+            transform: scale(1.02);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+            font-weight: 600;
         }
+        
+        /* 子頁籤區域 : 不同色彩基底 */
         .viewer-sub-tabs-wrapper {
             background: var(--bg-sub-wrapper);
             border-bottom: 1px solid var(--border-sub);
             flex-shrink: 0;
-            padding: 0.25rem 1.25rem 0 1.25rem;
+            padding: 0.5rem 1.5rem 0 1.5rem;
+            position: relative;
+            z-index: 1;
         }
         .viewer-sub-tabs-list {
             display: flex;
-            gap: 0.4rem;
-            padding-bottom: 0.4rem;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
             flex-wrap: wrap;
         }
+        /* 子頁籤按鈕 獨立色系，與主頁籤區別 (不同背幕) */
         .viewer-sub-tab {
             background: var(--bg-sub-tab-inactive);
             border: none;
-            padding: 0.35rem 0.9rem;
-            font-size: 0.75rem;
-            border-radius: 2rem;
+            padding: 0.45rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border-radius: 32px;
             color: var(--text-sub-tab-inactive);
             cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            letter-spacing: 0.2px;
+        }
+        .viewer-sub-tab:hover {
+            background: var(--bg-sub-tab-hover);
+            transform: translateY(-1px);
         }
         .viewer-sub-tab.active {
             background: var(--bg-sub-tab-active);
             color: var(--text-sub-tab-active);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            font-weight: 550;
         }
+        
         .iframe-container {
             flex: 1;
             background: var(--iframe-bg);
-            margin: 0;
             position: relative;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: 0;
+            transition: opacity 0.2s;
         }
         .loading-overlay {
             position: absolute;
@@ -218,35 +273,42 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(245,247,250,0.9);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(3px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 20;
+            border-radius: 0;
         }
         .loading-spinner {
             background: var(--bg-header);
             color: var(--text-header);
-            padding: 1rem 1.8rem;
-            border-radius: 3rem;
+            padding: 1rem 2rem;
+            border-radius: 60px;
             display: flex;
-            gap: 0.8rem;
-            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15);
+            gap: 1rem;
+            align-items: center;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.25);
+            font-weight: 500;
         }
         .spinner-circle {
-            width: 1.4rem;
-            height: 1.4rem;
+            width: 1.5rem;
+            height: 1.5rem;
             border: 3px solid #cbd5e1;
             border-top-color: var(--bg-tab-active);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* 模態窗升級 */
         .modal {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -255,31 +317,53 @@
         .modal-content {
             background: var(--modal-bg);
             color: var(--text-header);
-            border-radius: 32px;
-            padding: 24px;
-            max-width: 400px;
+            border-radius: 2rem;
+            padding: 28px 32px;
+            max-width: 420px;
             width: 90%;
             text-align: center;
             border: 1px solid var(--border-header);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
         }
         .modal-content .logo {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 24px;
             margin: 16px 0;
+            font-size: 1.2rem;
         }
         button.outline {
             background: transparent;
             border: 1px solid var(--button-outline-border);
             color: var(--button-outline-text);
-            padding: 4px 12px;
+            padding: 6px 16px;
             border-radius: 60px;
             cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        button.outline:hover {
+            background: color-mix(in srgb, var(--button-outline-border) 20%, transparent);
+            transform: scale(0.97);
         }
         @media (max-width: 640px) {
-            .viewer-tabs-wrapper { padding: 0.4rem 0.5rem 0 0.5rem; }
-            .viewer-sub-tabs-wrapper { padding: 0.2rem 0.5rem 0 0.5rem; }
-            .viewer-header { padding: 8px 12px; }
+            .viewer-tabs-wrapper { padding: 0.5rem 0.8rem 0 0.8rem; }
+            .viewer-sub-tabs-wrapper { padding: 0.3rem 0.8rem 0 0.8rem; }
+            .viewer-header { padding: 10px 16px; }
+            .viewer-tab { padding: 0.45rem 1rem; font-size: 0.8rem; }
+            .viewer-sub-tab { padding: 0.35rem 0.8rem; font-size: 0.7rem; }
+        }
+        /* 自定義scrollbar 保持美觀 */
+        .viewer-tabs-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .viewer-tabs-scroll::-webkit-scrollbar-track {
+            background: var(--border-header);
+            border-radius: 10px;
+        }
+        .viewer-tabs-scroll::-webkit-scrollbar-thumb {
+            background: var(--bg-tab-active);
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -301,7 +385,7 @@
         <div id="loadingOverlay" class="loading-overlay" style="display: none;">
             <div class="loading-spinner">
                 <div class="spinner-circle"></div>
-                <span>載入中...</span>
+                <span>載入中，請稍後...</span>
             </div>
         </div>
         <iframe id="contentIframe" title="內容" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads"></iframe>
@@ -325,65 +409,47 @@
     const projectCode = params.get('projectCode');
     if (!projectCode) {
         document.getElementById('viewerTitle').innerText = '缺少專案代碼';
-        document.getElementById('contentIframe').srcdoc = '<html><body>無效的連結</body></html>';
+        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效的連結</body></html>';
     } else {
         loadProject(projectCode);
     }
 
-    // ---------- 記憶工具 (使用 localStorage, 依照專案代碼區分) ----------
+    // ========== 記憶核心 ==========
     function getStorageKey(projectCode, type) {
         return `viewer_memory_${projectCode}_${type}`;
     }
-
     function saveMainTabMemory(projectCode, mainItemId) {
         if (!projectCode || !mainItemId) return;
-        try {
-            localStorage.setItem(getStorageKey(projectCode, 'mainTab'), mainItemId);
-        } catch(e) { console.warn(e); }
+        try { localStorage.setItem(getStorageKey(projectCode, 'mainTab'), mainItemId); } catch(e) {}
     }
-
     function getMainTabMemory(projectCode) {
         if (!projectCode) return null;
-        try {
-            return localStorage.getItem(getStorageKey(projectCode, 'mainTab'));
-        } catch(e) { return null; }
+        try { return localStorage.getItem(getStorageKey(projectCode, 'mainTab')); } catch(e) { return null; }
     }
-
     function saveSubTabMemory(projectCode, subItemId) {
         if (!projectCode || !subItemId) return;
-        try {
-            localStorage.setItem(getStorageKey(projectCode, 'subTab'), subItemId);
-        } catch(e) { console.warn(e); }
+        try { localStorage.setItem(getStorageKey(projectCode, 'subTab'), subItemId); } catch(e) {}
     }
-
     function getSubTabMemory(projectCode) {
         if (!projectCode) return null;
-        try {
-            return localStorage.getItem(getStorageKey(projectCode, 'subTab'));
-        } catch(e) { return null; }
+        try { return localStorage.getItem(getStorageKey(projectCode, 'subTab')); } catch(e) { return null; }
     }
 
     async function loadProject(code) {
         try {
             const snapshot = await db.ref('projects/' + code).once('value');
             const data = snapshot.val();
-            if (!data) throw new Error('專案不存在');
+            if (!data) throw new Error('專案不存在或已被刪除');
 
-            // 套用主題
             const theme = data.theme || 'default';
             document.documentElement.setAttribute('data-theme', theme);
-
-            document.getElementById('viewerTitle').innerText = data.projectName || '未命名';
-            document.title = data.projectName || '專案檢視';
-            
-            // 取得主選單資料
+            document.getElementById('viewerTitle').innerText = data.projectName || '未命名專案';
+            document.title = data.projectName || '專案檢視模式';
             const mainItems = data.mainItems || [];
-            
-            // 渲染並嘗試恢復記憶的頁籤
             renderTabsWithMemory(code, mainItems);
         } catch (err) {
             document.getElementById('viewerTitle').innerText = '載入失敗';
-            document.getElementById('contentIframe').srcdoc = `<html><body>❌ ${err.message}</body></html>`;
+            document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;">⚠️ ${err.message}</body></html>`;
         }
     }
 
@@ -396,30 +462,25 @@
 
         function showLoading() { loading.style.display = 'flex'; }
         function hideLoading() { loading.style.display = 'none'; }
-        
         function loadUrl(url) {
-            if (!url) {
-                iframe.srcdoc = "<html><body style='background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;font-family:sans-serif;'>⚠️ 無效連結或無內容</body></html>";
+            if (!url || url.trim() === '') {
+                iframe.srcdoc = `<html><body style="background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:2rem;">📂 暫無內容或連結失效</body></html>`;
                 hideLoading();
                 return;
             }
             showLoading();
             iframe.onload = () => { hideLoading(); };
             iframe.onerror = () => {
-                iframe.srcdoc = `<html><body style='background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;'>⚠️ 無法載入連結</body></html>`;
+                iframe.srcdoc = `<html><body style="background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;">⚠️ 無法載入該網址</body></html>`;
                 hideLoading();
             };
             iframe.src = url;
         }
 
-        // 儲存主按鈕與子按鈕的引用映射，方便後續觸發點擊
-        const mainButtons = new Map(); // key: mainItemId, value: button element
-        const subButtonsMap = new Map(); // key: subItemId, value: button element (動態重建時會重新填充)
-
-        // 清空容器
+        const mainButtons = new Map();
         mainTabsDiv.innerHTML = '';
         
-        // 建立主頁籤按鈕
+        // 建立主選單按鈕
         mainItems.forEach((item) => {
             const btn = document.createElement('button');
             btn.className = 'viewer-tab';
@@ -429,74 +490,58 @@
             mainButtons.set(item.id, btn);
             
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // 切換主選單 active 狀態
                 document.querySelectorAll('.viewer-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                // 儲存記憶：主頁籤 id
                 saveMainTabMemory(projectCode, item.id);
                 
-                // 判斷是否有直接連結
+                // 直接連結處理
                 if (item.link && item.link.trim()) {
-                    // 有直接連結: 隱藏子頁籤容器，載入連結，並清除子頁籤記憶 (因為沒有子頁籤可選)
                     subTabsWrapper.style.display = 'none';
                     subTabsDiv.innerHTML = '';
                     loadUrl(item.link);
-                    // 清除子頁籤記憶 (因為主項目是直接連結，不具備子頁籤)
                     saveSubTabMemory(projectCode, null);
                 } else {
-                    // 沒有直接連結: 顯示子選單
                     const subItems = item.subItems || [];
                     subTabsWrapper.style.display = 'block';
                     subTabsDiv.innerHTML = '';
-                    subButtonsMap.clear();
                     
-                    if (subItems.length === 0) {
-                        // 無子項目，顯示提示並清空 iframe
-                        const emptyMsg = document.createElement('div');
-                        emptyMsg.style.padding = '8px';
-                        emptyMsg.style.color = 'var(--text-sub-tab-inactive)';
-                        emptyMsg.innerText = '📂 此主項目無子項目';
-                        subTabsDiv.appendChild(emptyMsg);
+                    if (!subItems.length) {
+                        const hintSpan = document.createElement('span');
+                        hintSpan.style.cssText = 'padding:6px 12px; font-size:0.75rem; color:var(--text-sub-tab-inactive); opacity:0.8;';
+                        hintSpan.innerText = '✨ 此項目無子頁面';
+                        subTabsDiv.appendChild(hintSpan);
                         loadUrl(null);
                         saveSubTabMemory(projectCode, null);
                     } else {
-                        // 建立子項目按鈕
-                        let firstValidSub = null;
+                        const subBtnMap = new Map();
+                        let firstSub = null;
                         subItems.forEach(sub => {
                             const subBtn = document.createElement('button');
                             subBtn.className = 'viewer-sub-tab';
                             subBtn.textContent = sub.name;
                             subBtn.dataset.id = sub.id;
                             subBtn.dataset.link = sub.link || '';
-                            subButtonsMap.set(sub.id, subBtn);
-                            
+                            subBtnMap.set(sub.id, subBtn);
                             subBtn.addEventListener('click', (e) => {
                                 e.stopPropagation();
-                                // 移除其他子項目的 active 狀態
                                 document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
                                 subBtn.classList.add('active');
-                                // 記憶子頁籤 id
                                 saveSubTabMemory(projectCode, sub.id);
-                                // 載入子頁籤連結
                                 loadUrl(sub.link);
                             });
                             subTabsDiv.appendChild(subBtn);
-                            if (!firstValidSub) firstValidSub = subBtn;
+                            if (!firstSub) firstSub = subBtn;
                         });
                         
-                        // 嘗試恢復此主項目下的子頁籤記憶
                         const rememberedSubId = getSubTabMemory(projectCode);
-                        let targetSubBtn = null;
-                        if (rememberedSubId && subButtonsMap.has(rememberedSubId)) {
-                            targetSubBtn = subButtonsMap.get(rememberedSubId);
+                        let targetSub = null;
+                        if (rememberedSubId && subBtnMap.has(rememberedSubId)) {
+                            targetSub = subBtnMap.get(rememberedSubId);
                         }
-                        if (targetSubBtn) {
-                            // 點擊記憶的子頁籤
-                            targetSubBtn.click();
-                        } else if (firstValidSub) {
-                            // 無記憶或記憶無效，點擊第一個
-                            firstValidSub.click();
+                        if (targetSub) {
+                            targetSub.click();
+                        } else if (firstSub) {
+                            firstSub.click();
                         } else {
                             loadUrl(null);
                         }
@@ -506,56 +551,48 @@
             mainTabsDiv.appendChild(btn);
         });
         
-        // 主頁籤記憶恢復邏輯
+        // 恢復主頁籤記憶
         const rememberedMainId = getMainTabMemory(projectCode);
-        let targetMainBtn = null;
+        let targetMain = null;
         if (rememberedMainId && mainButtons.has(rememberedMainId)) {
-            targetMainBtn = mainButtons.get(rememberedMainId);
+            targetMain = mainButtons.get(rememberedMainId);
         }
-        
-        if (targetMainBtn) {
-            // 如果找到記憶的主頁籤，直接觸發點擊事件（會自動處理子頁籤邏輯）
-            targetMainBtn.click();
+        if (targetMain) {
+            targetMain.click();
         } else {
-            // 否則點擊第一個主頁籤（若存在）
             const firstMain = mainTabsDiv.querySelector('.viewer-tab');
-            if (firstMain) {
-                firstMain.click();
-            } else {
-                // 完全沒有任何主頁籤，顯示空白訊息
+            if (firstMain) firstMain.click();
+            else {
                 subTabsWrapper.style.display = 'none';
                 loadUrl(null);
             }
         }
     }
 
-    // 關於彈窗（優化樣式，適應主題色）
+    // 關於視窗美化
     function showAboutModal() {
-        // 避免重複產生多個 modal
         if (document.querySelector('.modal')) return;
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <h3>📌 關於本系統</h3>
+                <h3>✨ 專案檢視系統</h3>
                 <div class="logo">
-                    <span style="font-weight:500;">🤖 DeepSeek</span>
-                    <span style="font-weight:500;">🔥 Firebase</span>
+                    <span style="font-weight:600;">🎨 多主題</span>
+                    <span style="font-weight:600;">🧠 智慧記憶</span>
+                    <span style="font-weight:600;">⚡ Firebase</span>
                 </div>
-                <p>構想：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
-                <p>設計：DeepSeek</p>
-                <p>資料庫：Firebase</p>
-                <p>版次：20260326.03 (智慧記憶頁籤及子頁籤)</p>
-                <button id="closeAboutBtn" class="outline" style="margin-top: 16px;">關閉</button>
+                <p>構想聯繫：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
+                <p>設計開發：DeepSeek</p>
+                <p>版本：<strong>2026.05.13 典雅記憶版</strong></p>
+                <p style="font-size:0.75rem; margin-top:12px;">✓ 主頁籤陰影效果 ✓ 子頁籤專屬配色 ✓ 自動記憶最後瀏覽頁籤</p>
+                <button id="closeAboutBtn" class="outline" style="margin-top: 20px;">關閉視窗</button>
             </div>
         `;
         document.body.appendChild(modal);
         const closeBtn = document.getElementById('closeAboutBtn');
         if (closeBtn) closeBtn.onclick = () => modal.remove();
-        // 點擊背景關閉
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
-        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
     document.getElementById('aboutBtn').addEventListener('click', showAboutModal);
 </script>
