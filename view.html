@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>專案檢視模式 | 智慧記憶</title>
+    <title>專案檢視模式 | 智慧記憶 + 行程日期對應</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <style>
@@ -16,14 +16,12 @@
             --bg-header: #ffffff;
             --border-header: #e2e8f0;
             --text-header: #0f172a;
-            /* 主頁籤樣式 (帶陰影) */
             --bg-tab-inactive: #f8fafc;
             --text-tab-inactive: #334155;
             --bg-tab-active: #1e293b;
             --text-tab-active: #ffffff;
             --tab-shadow: 0 2px 6px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
             --tab-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.08);
-            /* 子頁籤樣式 (不同色系 - 柔和藍紫) */
             --bg-sub-wrapper: #f8fafc;
             --border-sub: #e0e7ff;
             --bg-sub-tab-inactive: #eef2ff;
@@ -149,7 +147,6 @@
             flex-direction: column;
             height: 100%;
         }
-        /* 頭部區域微調 */
         .viewer-header {
             background: var(--bg-header);
             padding: 14px 24px;
@@ -169,7 +166,6 @@
             color: transparent;
             letter-spacing: -0.3px;
         }
-        /* 主頁籤容器增加陰影區塊 + 圓潤感 */
         .viewer-tabs-wrapper {
             background: var(--bg-header);
             border-bottom: 1px solid var(--border-header);
@@ -188,7 +184,6 @@
             display: flex;
             gap: 0.7rem;
         }
-        /* 主頁籤按鈕：陰影、圓角更大、過渡 */
         .viewer-tab {
             background: var(--bg-tab-inactive);
             border: none;
@@ -215,8 +210,6 @@
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
             font-weight: 600;
         }
-        
-        /* 子頁籤區域 : 不同色彩基底 */
         .viewer-sub-tabs-wrapper {
             background: var(--bg-sub-wrapper);
             border-bottom: 1px solid var(--border-sub);
@@ -231,7 +224,6 @@
             padding-bottom: 0.5rem;
             flex-wrap: wrap;
         }
-        /* 子頁籤按鈕 獨立色系，與主頁籤區別 (不同背幕) */
         .viewer-sub-tab {
             background: var(--bg-sub-tab-inactive);
             border: none;
@@ -244,6 +236,7 @@
             transition: all 0.2s ease;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             letter-spacing: 0.2px;
+            white-space: nowrap;
         }
         .viewer-sub-tab:hover {
             background: var(--bg-sub-tab-hover);
@@ -255,7 +248,6 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
             font-weight: 550;
         }
-        
         .iframe-container {
             flex: 1;
             background: var(--iframe-bg);
@@ -301,8 +293,6 @@
             animation: spin 0.7s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* 模態窗升級 */
         .modal {
             position: fixed;
             top: 0; left: 0;
@@ -353,7 +343,6 @@
             .viewer-tab { padding: 0.45rem 1rem; font-size: 0.8rem; }
             .viewer-sub-tab { padding: 0.35rem 0.8rem; font-size: 0.7rem; }
         }
-        /* 自定義scrollbar 保持美觀 */
         .viewer-tabs-scroll::-webkit-scrollbar {
             height: 4px;
         }
@@ -364,6 +353,15 @@
         .viewer-tabs-scroll::-webkit-scrollbar-thumb {
             background: var(--bg-tab-active);
             border-radius: 10px;
+        }
+        .trip-today-badge {
+            background: var(--bg-tab-active);
+            color: white;
+            font-size: 0.65rem;
+            border-radius: 30px;
+            padding: 2px 8px;
+            margin-left: 8px;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -409,7 +407,7 @@
     const projectCode = params.get('projectCode');
     if (!projectCode) {
         document.getElementById('viewerTitle').innerText = '缺少專案代碼';
-        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效的連結</body></html>';
+        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;">❌ 無效連結</body></html>';
     } else {
         loadProject(projectCode);
     }
@@ -435,6 +433,59 @@
         try { return localStorage.getItem(getStorageKey(projectCode, 'subTab')); } catch(e) { return null; }
     }
 
+    // 輔助: 解析日期 (支援 YYYY-MM-DD)
+    function parseISODate(dateStr) {
+        if (!dateStr) return null;
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return null;
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const date = new Date(year, month, day);
+        if (isNaN(date.getTime())) return null;
+        return date;
+    }
+
+    // 判斷今日是否在行程區間內，並返回對應的子項目 (根據日期精確比對)
+    function findTodaySubItemInTrip(mainItem, todayDate) {
+        if (!mainItem.isTrip) return null;
+        const startISO = mainItem.tripStartDate;
+        const endISO = mainItem.tripEndDate;
+        if (!startISO || !endISO) return null;
+        const startDate = parseISODate(startISO);
+        const endDate = parseISODate(endISO);
+        if (!startDate || !endDate) return null;
+        const today = todayDate || new Date();
+        const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        if (todayMidnight < startDate || todayMidnight > endDate) return null;
+        
+        const subItems = mainItem.subItems || [];
+        const todayISO = todayMidnight.toISOString().split('T')[0];
+        const matchedSub = subItems.find(sub => sub.date === todayISO && !sub.isOverview);
+        if (matchedSub) return matchedSub;
+        const overviewSub = subItems.find(sub => sub.isOverview === true);
+        return overviewSub || null;
+    }
+
+    // 決定某主項目點擊後應優先顯示的子項目
+    function getDefaultSubItemForMain(mainItem, rememberedSubId, existingSubItemsMap) {
+        if (!mainItem) return null;
+        if (mainItem.isTrip) {
+            const todaySub = findTodaySubItemInTrip(mainItem, new Date());
+            if (todaySub && existingSubItemsMap.has(todaySub.id)) {
+                return todaySub;
+            }
+            const overviewSub = (mainItem.subItems || []).find(sub => sub.isOverview === true);
+            if (overviewSub && existingSubItemsMap.has(overviewSub.id)) {
+                return overviewSub;
+            }
+        }
+        if (rememberedSubId && existingSubItemsMap.has(rememberedSubId)) {
+            return existingSubItemsMap.get(rememberedSubId);
+        }
+        return null;
+    }
+
     async function loadProject(code) {
         try {
             const snapshot = await db.ref('projects/' + code).once('value');
@@ -446,14 +497,24 @@
             document.getElementById('viewerTitle').innerText = data.projectName || '未命名專案';
             document.title = data.projectName || '專案檢視模式';
             const mainItems = data.mainItems || [];
-            renderTabsWithMemory(code, mainItems);
+            mainItems.forEach(item => {
+                if (item.isTrip === undefined) item.isTrip = false;
+                if (item.tripStartDate === undefined) item.tripStartDate = '';
+                if (item.tripEndDate === undefined) item.tripEndDate = '';
+                if (!item.subItems) item.subItems = [];
+                item.subItems.forEach(sub => {
+                    if (sub.date === undefined) sub.date = '';
+                    if (sub.isOverview === undefined) sub.isOverview = false;
+                });
+            });
+            renderTabsWithSmartRules(code, mainItems);
         } catch (err) {
             document.getElementById('viewerTitle').innerText = '載入失敗';
             document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;">⚠️ ${err.message}</body></html>`;
         }
     }
 
-    function renderTabsWithMemory(projectCode, mainItems) {
+    function renderTabsWithSmartRules(projectCode, mainItems) {
         const mainTabsDiv = document.getElementById('mainTabs');
         const subTabsWrapper = document.getElementById('subTabsWrapper');
         const subTabsDiv = document.getElementById('subTabs');
@@ -479,113 +540,132 @@
 
         const mainButtons = new Map();
         mainTabsDiv.innerHTML = '';
-        
-        // 建立主選單按鈕
-        mainItems.forEach((item) => {
-            const btn = document.createElement('button');
-            btn.className = 'viewer-tab';
-            btn.textContent = item.name;
-            btn.dataset.id = item.id;
-            btn.dataset.link = item.link || '';
-            mainButtons.set(item.id, btn);
-            
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.viewer-tab').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                saveMainTabMemory(projectCode, item.id);
-                
-                // 直接連結處理
-                if (item.link && item.link.trim()) {
-                    subTabsWrapper.style.display = 'none';
-                    subTabsDiv.innerHTML = '';
-                    loadUrl(item.link);
-                    saveSubTabMemory(projectCode, null);
-                } else {
-                    const subItems = item.subItems || [];
-                    subTabsWrapper.style.display = 'block';
-                    subTabsDiv.innerHTML = '';
-                    
-                    if (!subItems.length) {
-                        const hintSpan = document.createElement('span');
-                        hintSpan.style.cssText = 'padding:6px 12px; font-size:0.75rem; color:var(--text-sub-tab-inactive); opacity:0.8;';
-                        hintSpan.innerText = '✨ 此項目無子頁面';
-                        subTabsDiv.appendChild(hintSpan);
-                        loadUrl(null);
-                        saveSubTabMemory(projectCode, null);
-                    } else {
-                        const subBtnMap = new Map();
-                        let firstSub = null;
-                        subItems.forEach(sub => {
-                            const subBtn = document.createElement('button');
-                            subBtn.className = 'viewer-sub-tab';
-                            subBtn.textContent = sub.name;
-                            subBtn.dataset.id = sub.id;
-                            subBtn.dataset.link = sub.link || '';
-                            subBtnMap.set(sub.id, subBtn);
-                            subBtn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
-                                subBtn.classList.add('active');
-                                saveSubTabMemory(projectCode, sub.id);
-                                loadUrl(sub.link);
-                            });
-                            subTabsDiv.appendChild(subBtn);
-                            if (!firstSub) firstSub = subBtn;
-                        });
-                        
-                        const rememberedSubId = getSubTabMemory(projectCode);
-                        let targetSub = null;
-                        if (rememberedSubId && subBtnMap.has(rememberedSubId)) {
-                            targetSub = subBtnMap.get(rememberedSubId);
-                        }
-                        if (targetSub) {
-                            targetSub.click();
-                        } else if (firstSub) {
-                            firstSub.click();
-                        } else {
-                            loadUrl(null);
-                        }
-                    }
-                }
-            });
-            mainTabsDiv.appendChild(btn);
-        });
-        
-        // 恢復主頁籤記憶
-        const rememberedMainId = getMainTabMemory(projectCode);
-        let targetMain = null;
-        if (rememberedMainId && mainButtons.has(rememberedMainId)) {
-            targetMain = mainButtons.get(rememberedMainId);
-        }
-        if (targetMain) {
-            targetMain.click();
-        } else {
-            const firstMain = mainTabsDiv.querySelector('.viewer-tab');
-            if (firstMain) firstMain.click();
-            else {
+        let currentSubMap = new Map();
+
+        function switchToMainItem(mainItem, skipMemorySave = false) {
+            if (!mainItem) return;
+            if (!skipMemorySave) saveMainTabMemory(projectCode, mainItem.id);
+            document.querySelectorAll('.viewer-tab').forEach(btn => btn.classList.remove('active'));
+            const activeMainBtn = mainButtons.get(mainItem.id);
+            if (activeMainBtn) activeMainBtn.classList.add('active');
+
+            // 有直接連結的主項目 (且非行程模式，行程模式一律走子頁籤)
+            if (mainItem.link && mainItem.link.trim() !== '' && !mainItem.isTrip) {
                 subTabsWrapper.style.display = 'none';
+                subTabsDiv.innerHTML = '';
+                loadUrl(mainItem.link);
+                saveSubTabMemory(projectCode, null);
+                return;
+            }
+
+            const subItems = mainItem.subItems || [];
+            subTabsWrapper.style.display = 'block';
+            subTabsDiv.innerHTML = '';
+            currentSubMap.clear();
+
+            if (!subItems.length) {
+                const hintSpan = document.createElement('span');
+                hintSpan.style.cssText = 'padding:6px 12px; font-size:0.75rem; color:var(--text-sub-tab-inactive); opacity:0.8;';
+                hintSpan.innerText = '✨ 此項目無子頁面';
+                subTabsDiv.appendChild(hintSpan);
+                loadUrl(null);
+                saveSubTabMemory(projectCode, null);
+                return;
+            }
+
+            const subButtons = [];
+            subItems.forEach(sub => {
+                const subBtn = document.createElement('button');
+                subBtn.className = 'viewer-sub-tab';
+                // 行程模式的子項目: 只顯示名稱，不附加日期 (改善體驗)
+                let displayName = sub.name;
+                // 若為總覽且是行程模式，可加個小圖示但不影響長度
+                if (mainItem.isTrip && sub.isOverview && !displayName.includes('📋')) {
+                    displayName = `📋 ${displayName}`;
+                }
+                subBtn.textContent = displayName;
+                subBtn.dataset.id = sub.id;
+                subBtn.dataset.link = sub.link || '';
+                subBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
+                    subBtn.classList.add('active');
+                    saveSubTabMemory(projectCode, sub.id);
+                    loadUrl(sub.link);
+                });
+                subTabsDiv.appendChild(subBtn);
+                currentSubMap.set(sub.id, subBtn);
+                subButtons.push(subBtn);
+            });
+
+            const rememberedSubId = getSubTabMemory(projectCode);
+            let targetSub = getDefaultSubItemForMain(mainItem, rememberedSubId, currentSubMap);
+            
+            if (!targetSub && rememberedSubId && currentSubMap.has(rememberedSubId)) {
+                targetSub = currentSubMap.get(rememberedSubId);
+            }
+            if (!targetSub && subButtons.length > 0) {
+                targetSub = subButtons[0];
+            }
+            
+            if (targetSub) {
+                targetSub.click();
+            } else {
                 loadUrl(null);
             }
         }
+
+        // 建立主項目按鈕
+        mainItems.forEach((item) => {
+            const btn = document.createElement('button');
+            btn.className = 'viewer-tab';
+            let btnText = item.name;
+            if (item.isTrip && item.tripStartDate && item.tripEndDate) {
+                btnText += ` ✈️`;
+            }
+            btn.textContent = btnText;
+            btn.dataset.id = item.id;
+            btn.dataset.link = item.link || '';
+            mainButtons.set(item.id, btn);
+            btn.addEventListener('click', (e) => {
+                switchToMainItem(item, false);
+            });
+            mainTabsDiv.appendChild(btn);
+        });
+
+        const rememberedMainId = getMainTabMemory(projectCode);
+        let targetMainItem = null;
+        if (rememberedMainId && mainButtons.has(rememberedMainId)) {
+            targetMainItem = mainItems.find(m => m.id === rememberedMainId);
+        }
+        if (!targetMainItem && mainItems.length > 0) {
+            targetMainItem = mainItems[0];
+        }
+        if (targetMainItem) {
+            switchToMainItem(targetMainItem, true);
+        } else {
+            subTabsWrapper.style.display = 'none';
+            loadUrl(null);
+        }
     }
 
-    // 關於視窗美化
+    // 關於視窗
     function showAboutModal() {
         if (document.querySelector('.modal')) return;
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <h3>✨ 專案檢視系統</h3>
+                <h3>✨ 智慧行程檢視系統</h3>
                 <div class="logo">
-                    <span style="font-weight:600;">🎨 多主題</span>
-                    <span style="font-weight:600;">🧠 智慧記憶</span>
-                    <span style="font-weight:600;">⚡ Firebase</span>
+                    <span>🎨 多主題</span>
+                    <span>🧠 智慧記憶</span>
+                    <span>📅 行程日期對應</span>
                 </div>
                 <p>構想聯繫：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
                 <p>設計開發：DeepSeek</p>
-                <p>版本：<strong>2026.05.13 典雅記憶版</strong></p>
-                <p style="font-size:0.75rem; margin-top:12px;">✓ 主頁籤陰影效果 ✓ 子頁籤專屬配色 ✓ 自動記憶最後瀏覽頁籤</p>
+                <p>版本：<strong>2026.05.15 行程頁籤簡潔版</strong></p>
+                <p style="font-size:0.75rem; margin-top:12px;">✓ 行程子頁籤只顯示名稱，不顯示日期<br>✓ 行程區間自動跳轉今日頁籤<br>✓ 記憶與智慧規則並存</p>
                 <button id="closeAboutBtn" class="outline" style="margin-top: 20px;">關閉視窗</button>
             </div>
         `;
