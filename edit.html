@@ -67,10 +67,107 @@
         input:focus { outline: none; border-color: #2c3e66; }
         hr { margin: 20px 0; border-color: #eef2fa; }
         @media (max-width: 640px) { .panel { padding: 16px; } .modal-content { padding: 20px; } }
+
+        /* ===== 風格主題樣式 ===== */
+        /* 預設 (default) */
+        .theme-default .main-item-card { border-color: #eef2f9; }
+        .theme-default .main-item-header { background: #fefefe; }
+        .theme-default .sub-tab.active { background: #2c3e66; }
+
+        /* 海洋 (ocean) */
+        .theme-ocean .main-item-card { border-color: #b3d9e8; background: #f0f9ff; }
+        .theme-ocean .main-item-header { background: #e3f0f7; }
+        .theme-ocean .main-item-header .title { color: #0a4b6e; }
+        .theme-ocean .sub-tab { background: #d4eaf5; color: #0a4b6e; }
+        .theme-ocean .sub-tab.active { background: #1a7a9e; color: white; }
+        .theme-ocean .badge { background: #c5e0ed; color: #0a4b6e; }
+        .theme-ocean .trip-range-badge { background: #b3d9e8; color: #0a4b6e; }
+        .theme-ocean .panel { background: rgba(240, 249, 255, 0.98); }
+
+        /* 森林 (forest) */
+        .theme-forest .main-item-card { border-color: #a8c4a8; background: #f0f7ee; }
+        .theme-forest .main-item-header { background: #e2eee0; }
+        .theme-forest .main-item-header .title { color: #2d5a2d; }
+        .theme-forest .sub-tab { background: #d4e8d4; color: #2d5a2d; }
+        .theme-forest .sub-tab.active { background: #3d7a3d; color: white; }
+        .theme-forest .badge { background: #c5dec5; color: #2d5a2d; }
+        .theme-forest .trip-range-badge { background: #a8c4a8; color: #2d5a2d; }
+        .theme-forest .panel { background: rgba(240, 247, 238, 0.98); }
+
+        /* 暖陽 (sunset) */
+        .theme-sunset .main-item-card { border-color: #f5d4c4; background: #fff6f0; }
+        .theme-sunset .main-item-header { background: #fdede6; }
+        .theme-sunset .main-item-header .title { color: #8a4a2a; }
+        .theme-sunset .sub-tab { background: #f5ddd0; color: #8a4a2a; }
+        .theme-sunset .sub-tab.active { background: #c4704a; color: white; }
+        .theme-sunset .badge { background: #f0d4c4; color: #8a4a2a; }
+        .theme-sunset .trip-range-badge { background: #f5d4c4; color: #8a4a2a; }
+        .theme-sunset .panel { background: rgba(255, 246, 240, 0.98); }
+
+        /* 薰衣草 (lavender) */
+        .theme-lavender .main-item-card { border-color: #d4c4e8; background: #f8f4ff; }
+        .theme-lavender .main-item-header { background: #ede6f7; }
+        .theme-lavender .main-item-header .title { color: #5a3a7a; }
+        .theme-lavender .sub-tab { background: #ddd0f0; color: #5a3a7a; }
+        .theme-lavender .sub-tab.active { background: #7a4a9e; color: white; }
+        .theme-lavender .badge { background: #d4c4e8; color: #5a3a7a; }
+        .theme-lavender .trip-range-badge { background: #d4c4e8; color: #5a3a7a; }
+        .theme-lavender .panel { background: rgba(248, 244, 255, 0.98); }
+
+        /* 櫻花 (sakura) */
+        .theme-sakura .main-item-card { border-color: #f5c8d0; background: #fff5f7; }
+        .theme-sakura .main-item-header { background: #fde8ec; }
+        .theme-sakura .main-item-header .title { color: #7a3a4a; }
+        .theme-sakura .sub-tab { background: #f5d0d8; color: #7a3a4a; }
+        .theme-sakura .sub-tab.active { background: #c45a6a; color: white; }
+        .theme-sakura .badge { background: #f0c8d0; color: #7a3a4a; }
+        .theme-sakura .trip-range-badge { background: #f5c8d0; color: #7a3a4a; }
+        .theme-sakura .panel { background: rgba(255, 245, 247, 0.98); }
+
+        /* 夜空 (night) */
+        .theme-night .main-item-card { border-color: #4a5a7a; background: #1a2a3e; }
+        .theme-night .main-item-header { background: #2a3a5a; }
+        .theme-night .main-item-header .title { color: #c8d8f0; }
+        .theme-night .main-item-detail { background: #1a2a3e; color: #c8d8f0; }
+        .theme-night .main-item-detail a { color: #7ab8e8; }
+        .theme-night .sub-tab { background: #3a4a6a; color: #c8d8f0; }
+        .theme-night .sub-tab.active { background: #5a7aaa; color: white; }
+        .theme-night .badge { background: #3a4a6a; color: #c8d8f0; }
+        .theme-night .trip-range-badge { background: #4a5a7a; color: #c8d8f0; }
+        .theme-night .panel { background: rgba(20, 30, 50, 0.98); }
+        .theme-night .panel-header { border-bottom-color: #3a4a6a; }
+        .theme-night h1 { background: linear-gradient(135deg, #7ab8e8, #c8d8f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .theme-night h2 { color: #c8d8f0; }
+        .theme-night .sub-item-card { background: #2a3a5a; border-color: #4a5a7a; }
+        .theme-night .sub-item-header { background: #1a2a3e; color: #c8d8f0; }
+        .theme-night .sub-item-detail { background: #1a2a3e; color: #c8d8f0; }
+        .theme-night .sub-item-detail a { color: #7ab8e8; }
+        .theme-night .unarchived-quick { background: #2a3a5a; border-color: #4a5a7a; color: #c8d8f0; }
+        .theme-night .project-chip { background: #2a3a5a; border-color: #4a5a7a; color: #c8d8f0; }
+        .theme-night .project-chip:hover { background: #4a5a7a; color: white; }
+        .theme-night .date-range-group { background: #2a3a5a; }
+        .theme-night input, .theme-night select, .theme-night textarea { background: #2a3a5a; border-color: #4a5a7a; color: #c8d8f0; }
+        .theme-night input:focus { border-color: #7ab8e8; }
+        .theme-night .checkbox-label { background: #2a3a5a; color: #c8d8f0; }
+        .theme-night .lock-indicator { background: #4a2a2a; color: #e87a7a; }
+        .theme-night .modal-content { background: #1a2a3e; color: #c8d8f0; }
+        .theme-night .modal-header { border-bottom-color: #4a5a7a; }
+        .theme-night .close-btn { color: #c8d8f0; }
+        .theme-night .sub-editor-card { background: #2a3a5a; border-color: #4a5a7a; }
+        .theme-night .sub-editor-header { background: #1a2a3e; color: #c8d8f0; }
+        .theme-night .sub-editor-header strong { color: #c8d8f0; }
+        .theme-night .sub-editor-body { border-top-color: #4a5a7a; }
+        .theme-night button.outline { border-color: #4a5a7a; color: #c8d8f0; }
+        .theme-night button.outline:hover { background: #3a4a6a; border-color: #7ab8e8; }
+        .theme-night .sub-tabs { border-bottom-color: #4a5a7a; }
+        .theme-night .sub-item-card { background: #2a3a5a; border-color: #4a5a7a; }
+        .theme-night .sub-item-header { background: #1a2a3e; }
+        .theme-night hr { border-color: #4a5a7a; }
+        .theme-night .status-bar { background: #3a2a2a; border-left-color: #e87a7a; color: #c8d8f0; }
     </style>
 </head>
 <body>
-<div class="app-container">
+<div class="app-container" id="appContainer">
     <div id="firebaseStatus" class="status-bar"></div>
     <div class="panel">
         <div class="panel-header"><h1>📅 行程管理 · 光箱編輯子項目清晰顯示</h1><button id="aboutBtn" class="outline">ℹ️ 關於</button></div>
@@ -135,17 +232,111 @@
     }
 
     async function saveAllProjectsToDB() { if (!isDBReady) { showToast("離線模式未同步", true); return false; } try { const obj = {}; for (const p of allProjects) obj[p.projectCode] = { projectCode: p.projectCode, projectName: p.projectName, archived: p.archived||false, locked: p.locked||false, theme: p.theme||'default', mainItems: p.mainItems||[] }; await projectsRef.set(obj); showToast("✅ 已同步雲端"); return true; } catch(e) { showToast(`儲存失敗`, true); return false; } }
-    async function loadProjectsFromDB() { try { const snap = await projectsRef.once('value'); const data = snap.val(); if (data) { allProjects = Object.values(data); allProjects.forEach(p => { p.archived = p.archived||false; p.locked = p.locked||false; p.theme = p.theme||'default'; if (!p.mainItems) p.mainItems = []; p.mainItems.forEach(item => { if (!item.subItems) item.subItems = []; if (item.isTrip === undefined) item.isTrip = false; if (item.tripStartDate === undefined) item.tripStartDate = ''; if (item.tripEndDate === undefined) item.tripEndDate = ''; item.subItems.forEach(sub => { if (sub.date === undefined) sub.date = ''; if (sub.isOverview === undefined) sub.isOverview = false; }); }); }); } else allProjects = []; return allProjects; } catch(e) { updateStatus(false); isDBReady = false; return allProjects; } }
+    
+    async function loadProjectsFromDB() { 
+        try { 
+            const snap = await projectsRef.once('value'); 
+            const data = snap.val(); 
+            if (data) { 
+                allProjects = Object.values(data); 
+                allProjects.forEach(p => { 
+                    p.archived = p.archived || false; 
+                    p.locked = p.locked || false; 
+                    p.theme = p.theme || 'default'; 
+                    if (!p.mainItems) p.mainItems = []; 
+                    p.mainItems.forEach(item => { 
+                        if (!item.subItems) item.subItems = []; 
+                        if (item.isTrip === undefined) item.isTrip = false; 
+                        if (item.tripStartDate === undefined) item.tripStartDate = ''; 
+                        if (item.tripEndDate === undefined) item.tripEndDate = ''; 
+                        item.subItems.forEach(sub => { 
+                            if (sub.date === undefined) sub.date = ''; 
+                            if (sub.isOverview === undefined) sub.isOverview = false; 
+                        }); 
+                    }); 
+                }); 
+            } else { 
+                allProjects = []; 
+            } 
+            return allProjects; 
+        } catch(e) { 
+            updateStatus(false); 
+            isDBReady = false; 
+            return allProjects; 
+        } 
+    }
 
-    async function refreshAdminUI() { await loadProjectsFromDB(); renderProjectSelect(); renderUnarchivedChips(); if (currentEditProjectCode) { const found = allProjects.find(p=>p.projectCode===currentEditProjectCode); if (found) { currentProject = JSON.parse(JSON.stringify(found)); normalizeProject(); renderEditorList(); document.getElementById('projectSelect').value = currentEditProjectCode; } else { currentEditProjectCode=null; currentProject=null; document.getElementById('editorContent').innerHTML='<div style="padding:40px;">請選擇專案</div>'; } } else if (allProjects.length>0 && !currentProject) { const target = allProjects.find(p=>!p.archived)||allProjects[0]; currentEditProjectCode=target.projectCode; currentProject=JSON.parse(JSON.stringify(target)); normalizeProject(); renderEditorList(); document.getElementById('projectSelect').value=currentEditProjectCode; } else if (!currentProject) document.getElementById('editorContent').innerHTML='<div style="padding:40px;">無專案，點新增</div>'; else renderEditorList(); }
+    async function refreshAdminUI() { 
+        await loadProjectsFromDB(); 
+        renderProjectSelect(); 
+        renderUnarchivedChips(); 
+        
+        if (currentEditProjectCode) { 
+            const found = allProjects.find(p=>p.projectCode===currentEditProjectCode); 
+            if (found) { 
+                currentProject = JSON.parse(JSON.stringify(found)); 
+                normalizeProject(); 
+                renderEditorList(); 
+                document.getElementById('projectSelect').value = currentEditProjectCode; 
+            } else { 
+                currentEditProjectCode=null; 
+                currentProject=null; 
+                document.getElementById('editorContent').innerHTML='<div style="padding:40px;">請選擇專案</div>'; 
+            } 
+        } else if (allProjects.length > 0) { 
+            const target = allProjects.find(p=>!p.archived) || allProjects[0]; 
+            if (target) {
+                currentEditProjectCode = target.projectCode; 
+                currentProject = JSON.parse(JSON.stringify(target)); 
+                normalizeProject(); 
+                renderEditorList(); 
+                document.getElementById('projectSelect').value = currentEditProjectCode; 
+            }
+        } else { 
+            document.getElementById('editorContent').innerHTML='<div style="padding:40px;">無專案，請點擊「新增專案」</div>'; 
+            currentProject = null;
+            currentEditProjectCode = null;
+        } 
+        
+        // 套用主題
+        applyTheme();
+    }
+    
+    // ===== 新增：套用主題函數 =====
+    function applyTheme() {
+        const container = document.getElementById('appContainer');
+        if (!container) return;
+        // 移除所有主題 class
+        container.className = 'app-container';
+        if (currentProject && currentProject.theme) {
+            container.classList.add('theme-' + currentProject.theme);
+        }
+    }
+    // ===== 主題函數結束 =====
+    
     function normalizeProject() { if (!currentProject) return; currentProject.mainItems.forEach(item => { if (!item.subItems) item.subItems = []; if (item.isTrip===undefined) item.isTrip=false; if (item.tripStartDate===undefined) item.tripStartDate=''; if (item.tripEndDate===undefined) item.tripEndDate=''; item.subItems.forEach(sub=>{ if(sub.date===undefined) sub.date=''; if(sub.isOverview===undefined) sub.isOverview=false; }); }); }
     function renderProjectSelect() { const sel=document.getElementById('projectSelect'); if(!sel) return; sel.innerHTML='<option value="">-- 選擇專案 --</option>'; const unarchived=allProjects.filter(p=>!p.archived); const archived=allProjects.filter(p=>p.archived); const add=(list,label)=>{ if(!list.length) return; const g=document.createElement('optgroup'); g.label=label; list.forEach(p=>{ const opt=document.createElement('option'); opt.value=p.projectCode; opt.textContent=`${p.projectName}${p.locked?' 🔒':''}${p.archived?' (已歸檔)':''}`; g.appendChild(opt); }); sel.appendChild(g); }; add(unarchived,'📂 未歸檔'); add(archived,'📦 已歸檔'); if(currentEditProjectCode) sel.value=currentEditProjectCode; }
     function renderUnarchivedChips() { const c=document.getElementById('unarchivedChips'); if(!c) return; const un=allProjects.filter(p=>!p.archived); if(!un.length){ c.innerHTML='<span>無未歸檔專案</span>'; return; } c.innerHTML=un.map(p=>`<span class="project-chip" data-code="${p.projectCode}">📌 ${escapeHtml(p.projectName)}${p.locked?' 🔒':''}</span>`).join(''); document.querySelectorAll('.project-chip').forEach(chip=>chip.addEventListener('click',()=>switchToProject(chip.dataset.code))); }
-    function switchToProject(code) { const target=allProjects.find(p=>p.projectCode===code); if(target){ currentEditProjectCode=code; currentProject=JSON.parse(JSON.stringify(target)); normalizeProject(); renderEditorList(); renderProjectSelect(); renderUnarchivedChips(); } }
+    function switchToProject(code) { const target=allProjects.find(p=>p.projectCode===code); if(target){ currentEditProjectCode=code; currentProject=JSON.parse(JSON.stringify(target)); normalizeProject(); renderEditorList(); renderProjectSelect(); renderUnarchivedChips(); applyTheme(); } }
     async function deleteCurrentProject() { if(!currentProject||currentProject.locked) return showToast("無法刪除:鎖定",true); if(confirm(`刪除「${currentProject.projectName}」？`)){ allProjects=allProjects.filter(p=>p.projectCode!==currentEditProjectCode); if(currentEditProjectCode===currentProject.projectCode) currentEditProjectCode=null,currentProject=null; renderProjectSelect(); renderUnarchivedChips(); await saveAllProjectsToDB(); refreshAdminUI(); } }
     async function toggleArchiveCurrent() { if(!currentProject||currentProject.locked) return showToast("無法歸檔",true); currentProject.archived=!currentProject.archived; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); renderProjectSelect(); renderUnarchivedChips(); await saveAllProjectsToDB(); renderEditorList(); }
     async function toggleLock() { if(!currentProject) return; currentProject.locked=!currentProject.locked; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); await saveAllProjectsToDB(); renderEditorList(); renderProjectSelect(); renderUnarchivedChips(); showToast(currentProject.locked?"🔒已鎖定":"🔓已解鎖"); }
-    async function updateProjectTheme(theme) { if(!currentProject) return; currentProject.theme=theme; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); await saveAllProjectsToDB(); showToast(`風格已更新`); }
+    async function updateProjectTheme(theme) { if(!currentProject) return; currentProject.theme=theme; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); await saveAllProjectsToDB(); applyTheme(); showToast(`🎨 風格已更新為: ${getThemeName(theme)}`); }
+    
+    // ===== 新增：取得主題名稱 =====
+    function getThemeName(theme) {
+        const names = {
+            'default': '預設',
+            'ocean': '海洋',
+            'forest': '森林',
+            'sunset': '暖陽',
+            'lavender': '薰衣草',
+            'sakura': '櫻花',
+            'night': '夜空'
+        };
+        return names[theme] || theme;
+    }
+    // ===== 主題名稱函數結束 =====
 
     // 光箱編輯主項目 — 子項目標題直接顯示有意義的名稱 (不再只顯示「子項目」)
     function openMainItemModal(mainIndex) {
@@ -307,7 +498,18 @@
         container.innerHTML = `
             <div style="margin-bottom:28px;">
                 <div class="flex-row"><label>專案名稱</label><input type="text" id="editProjectName" value="${escapeHtml(currentProject.projectName)}" ${locked?'disabled':''} style="flex:1;">${currentProject.archived?'<span class="archived-tag">已歸檔</span>':''}<button id="lockToggleBtn" class="outline small">${locked?'🔒鎖定中':'🔓解鎖'}</button></div>
-                <div style="margin-top:14px;"><label>🎨風格</label><select id="themeSelect" ${locked?'disabled':''}><option value="default" ${currentProject.theme==='default'?'selected':''}>預設</option><option value="ocean" ${currentProject.theme==='ocean'?'selected':''}>海洋</option></select></div>
+                <div style="margin-top:14px;">
+                    <label>🎨 風格主題</label>
+                    <select id="themeSelect" ${locked?'disabled':''}>
+                        <option value="default" ${currentProject.theme==='default'?'selected':''}>🌐 預設</option>
+                        <option value="ocean" ${currentProject.theme==='ocean'?'selected':''}>🌊 海洋</option>
+                        <option value="forest" ${currentProject.theme==='forest'?'selected':''}>🌲 森林</option>
+                        <option value="sunset" ${currentProject.theme==='sunset'?'selected':''}>🌅 暖陽</option>
+                        <option value="lavender" ${currentProject.theme==='lavender'?'selected':''}>💜 薰衣草</option>
+                        <option value="sakura" ${currentProject.theme==='sakura'?'selected':''}>🌸 櫻花</option>
+                        <option value="night" ${currentProject.theme==='night'?'selected':''}>🌙 夜空</option>
+                    </select>
+                </div>
                 ${locked?'<div class="lock-indicator">🔒 鎖定狀態，僅可瀏覽內容與連結 (可複製)</div>':''}
             </div>
             <div class="flex-row"><h3>📂 主項目</h3>${!locked?'<button id="addMainItemBtn" class="small">➕新增主項目</button>':''}</div>
@@ -345,6 +547,22 @@
                 }).join('')}
             </div>
         `;
+        
+        // 專案名稱即時儲存
+        const nameInput = document.getElementById('editProjectName');
+        if (nameInput && !nameInput.disabled) {
+            nameInput.removeEventListener('input', handleProjectNameChange);
+            nameInput.addEventListener('input', handleProjectNameChange);
+        }
+        
+        function handleProjectNameChange() {
+            if (this && !this.disabled) {
+                currentProject.projectName = this.value.trim() || '未命名';
+                renderProjectSelect();
+                renderUnarchivedChips();
+            }
+        }
+        
         if (!locked) document.getElementById('addMainItemBtn')?.addEventListener('click', () => { currentProject.mainItems.push({ id: generateGuid(), name: "新主項目", link: "", isTrip: false, tripStartDate: "", tripEndDate: "", subItems: [] }); renderEditorList(); });
         document.querySelectorAll('.edit-main-btn').forEach(btn => btn.addEventListener('click', (e) => { const idx = parseInt(btn.dataset.idx); openMainItemModal(idx); }));
         document.querySelectorAll('.delete-main-btn').forEach(btn => btn.addEventListener('click', (e) => { const idx = parseInt(btn.dataset.idx); if(!locked) currentProject.mainItems.splice(idx,1); renderEditorList(); }));
@@ -356,12 +574,130 @@
             document.querySelectorAll('.sub-tab').forEach(tab => tab.addEventListener('click', (e) => { const idx = tab.dataset.tab; const parent = tab.closest('.main-item-detail'); parent.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); parent.querySelectorAll('.sub-panel').forEach((p,pi)=> p.classList.toggle('active', pi == idx)); }));
             document.querySelectorAll('.sub-tab').forEach(tab => { if (tab.closest('.main-item-detail')?.querySelector('.sub-tab')) tab.classList.add('active'); tab.closest('.main-item-detail')?.querySelector('.sub-panel')?.classList.add('active'); });
         }, 50);
+        
+        // 套用主題
+        applyTheme();
     }
 
-    function importBatchData(text) { showToast("匯入功能支援行程區間與日期", false); }
-    function exportBatchData() { if(!currentProject) return; let out=''; for(const main of currentProject.mainItems){ out+= (main.isTrip?'# [行程] ':'# ')+main.name+'\n'; if(main.isTrip && main.tripStartDate && main.tripEndDate) out+=`[行程區間] ${main.tripStartDate}~${main.tripEndDate}\n`; else if(main.link && !main.isTrip) out+=main.link+'\n'; for(const sub of (main.subItems||[])) out+=sub.name+'\n'+(sub.link?sub.link+'\n':'')+(sub.date?sub.date+'\n':''); } const blob=new Blob([out],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${currentProject.projectName}_行程匯出.txt`; a.click(); showToast("匯出完成"); }
-    async function saveCurrentProject() { if(!currentProject||currentProject.locked) return; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); renderProjectSelect(); await saveAllProjectsToDB(); showToast("已儲存雲端"); }
-    async function createNewProject() { const newCode=generateGuid(); const newProj={ projectCode:newCode, projectName:"新專案", archived:false, locked:false, theme:'default', mainItems:[] }; allProjects.push(newProj); currentEditProjectCode=newCode; currentProject=JSON.parse(JSON.stringify(newProj)); normalizeProject(); renderEditorList(); renderProjectSelect(); renderUnarchivedChips(); await saveAllProjectsToDB(); showToast("新專案建立"); }
+    function importBatchData(text) { 
+        if (!currentProject || currentProject.locked) {
+            showToast("專案已鎖定，無法匯入", true); 
+            return;
+        }
+        try {
+            const lines = text.split('\n').filter(line => line.trim());
+            let currentMain = null;
+            let isTripMode = false;
+            
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('# [行程]')) {
+                    const name = trimmed.replace('# [行程]', '').trim();
+                    currentMain = { 
+                        id: generateGuid(), 
+                        name: name || '新行程', 
+                        link: '', 
+                        isTrip: true, 
+                        tripStartDate: '', 
+                        tripEndDate: '', 
+                        subItems: [] 
+                    };
+                    isTripMode = true;
+                    currentProject.mainItems.push(currentMain);
+                } else if (trimmed.startsWith('# ')) {
+                    const name = trimmed.replace('# ', '').trim();
+                    currentMain = { 
+                        id: generateGuid(), 
+                        name: name || '新主項目', 
+                        link: '', 
+                        isTrip: false, 
+                        tripStartDate: '', 
+                        tripEndDate: '', 
+                        subItems: [] 
+                    };
+                    isTripMode = false;
+                    currentProject.mainItems.push(currentMain);
+                } else if (trimmed.startsWith('[行程區間]') && currentMain && isTripMode) {
+                    const range = trimmed.replace('[行程區間]', '').trim();
+                    const dates = range.split('~');
+                    if (dates.length === 2) {
+                        const start = parseDateToISO(dates[0].trim());
+                        const end = parseDateToISO(dates[1].trim());
+                        if (start && end) {
+                            currentMain.tripStartDate = start;
+                            currentMain.tripEndDate = end;
+                            currentMain.subItems = generateTripSubitemsFromRange(start, end);
+                            isTripMode = false;
+                        }
+                    }
+                } else if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                    if (currentMain && !currentMain.isTrip) {
+                        if (!currentMain.link) {
+                            currentMain.link = trimmed;
+                        } else if (currentMain.subItems.length > 0) {
+                            const lastSub = currentMain.subItems[currentMain.subItems.length - 1];
+                            if (lastSub && !lastSub.link) {
+                                lastSub.link = trimmed;
+                            }
+                        }
+                    } else if (currentMain && currentMain.isTrip && currentMain.subItems.length > 0) {
+                        const lastSub = currentMain.subItems[currentMain.subItems.length - 1];
+                        if (lastSub && !lastSub.link) {
+                            lastSub.link = trimmed;
+                        }
+                    }
+                } else if (trimmed && currentMain) {
+                    const sub = { 
+                        id: generateGuid(), 
+                        name: trimmed, 
+                        link: '', 
+                        date: '', 
+                        isOverview: false 
+                    };
+                    if (currentMain.isTrip) {
+                        const dateISO = parseDateToISO(trimmed);
+                        if (dateISO) {
+                            sub.date = dateISO;
+                        }
+                    }
+                    currentMain.subItems.push(sub);
+                }
+            }
+            
+            renderEditorList();
+            showToast(`✅ 匯入完成，共 ${currentProject.mainItems.length} 個主項目`);
+        } catch(e) {
+            showToast('匯入失敗: ' + e.message, true);
+        }
+    }
+    
+    function exportBatchData() { if(!currentProject) return; let out=''; for(const main of currentProject.mainItems){ out+= (main.isTrip?'# [行程] ':'# ')+main.name+'\n'; if(main.isTrip && main.tripStartDate && main.tripEndDate) out+=`[行程區間] ${main.tripStartDate}~${main.tripEndDate}\n`; else if(main.link && !main.isTrip) out+=main.link+'\n'; for(const sub of (main.subItems||[])) out+=sub.name+'\n'+(sub.link?sub.link+'\n':''); } const blob=new Blob([out],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${currentProject.projectName}_行程匯出.txt`; a.click(); showToast("匯出完成"); }
+    async function saveCurrentProject() { 
+        if(!currentProject) return;
+        const nameInput = document.getElementById('editProjectName');
+        if (nameInput && !nameInput.disabled) {
+            currentProject.projectName = nameInput.value.trim() || '未命名';
+        }
+        const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); 
+        if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); 
+        renderProjectSelect(); 
+        await saveAllProjectsToDB(); 
+        showToast("已儲存雲端"); 
+    }
+    async function createNewProject() { 
+        const newCode=generateGuid(); 
+        const newProj={ projectCode:newCode, projectName:"新專案", archived:false, locked:false, theme:'default', mainItems:[] }; 
+        allProjects.push(newProj); 
+        currentEditProjectCode=newCode; 
+        currentProject=JSON.parse(JSON.stringify(newProj)); 
+        normalizeProject(); 
+        renderEditorList(); 
+        renderProjectSelect(); 
+        renderUnarchivedChips(); 
+        await saveAllProjectsToDB(); 
+        applyTheme();
+        showToast("新專案建立 - 請在名稱欄位輸入新名稱"); 
+    }
     function showAboutModal() { const m=document.createElement('div'); m.className='modal'; m.innerHTML=`<div class="modal-content"><h3>✨ 光箱子項目清晰顯示</h3><p>✓ 子項目標題直接顯示「名稱」或「名稱(日期)」<br>✓ 全部收合/展開方便排序<br>✓ 鎖定時仍可瀏覽複製連結<br>✓ 行程區間自動產生每日頁籤</p><button id="closeAboutBtn">關閉</button></div>`; document.body.appendChild(m); document.getElementById('closeAboutBtn').onclick=()=>m.remove(); }
     function openViewer(code) { window.open(`view.html?projectCode=${encodeURIComponent(code)}`, '_blank'); }
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
@@ -369,7 +705,42 @@
     window.onload = async () => {
         document.getElementById('addNewProjectBtn')?.addEventListener('click', createNewProject);
         document.getElementById('saveCurrentProjectBtn')?.addEventListener('click', saveCurrentProject);
-        document.getElementById('batchImportBtn')?.addEventListener('click', () => { if(currentProject?.locked) showToast("鎖定無法匯入", true); else { const mdiv=document.createElement('div'); mdiv.className='modal'; mdiv.innerHTML=`<div class="modal-content"><h3>批次匯入</h3><textarea id="batchTextArea" rows="8" placeholder="# 主項目名稱\n# [行程] 歐洲旅行\n[行程區間] 2026-05-21~2026-05-31\n景點名稱\nhttps://..."></textarea><div><button id="doBatch">匯入</button><button id="cancelBatch">取消</button></div></div>`; document.body.appendChild(mdiv); document.getElementById('cancelBatch').onclick=()=>mdiv.remove(); document.getElementById('doBatch').onclick=()=>{ importBatchData(document.getElementById('batchTextArea').value); mdiv.remove(); }; } });
+        document.getElementById('batchImportBtn')?.addEventListener('click', () => { 
+            if(currentProject?.locked) {
+                showToast("鎖定無法匯入", true); 
+                return;
+            }
+            const mdiv=document.createElement('div'); 
+            mdiv.className='modal'; 
+            mdiv.innerHTML=`
+                <div class="modal-content">
+                    <h3>批次匯入</h3>
+                    <p style="color:#666; margin-bottom:12px;">格式範例：</p>
+                    <pre style="background:#f5f5f5; padding:12px; border-radius:8px; font-size:0.8rem;">
+# 主項目名稱
+https://example.com
+子項目1
+子項目2
+
+# [行程] 歐洲旅行
+[行程區間] 2026-05-21~2026-05-31
+巴黎鐵塔
+羅浮宮
+                    </pre>
+                    <textarea id="batchTextArea" rows="8" placeholder="# 主項目名稱&#10;# [行程] 歐洲旅行&#10;[行程區間] 2026-05-21~2026-05-31&#10;景點名稱&#10;https://..."></textarea>
+                    <div style="margin-top:16px; display:flex; gap:12px;">
+                        <button id="doBatch">匯入</button>
+                        <button id="cancelBatch" class="outline">取消</button>
+                    </div>
+                </div>
+            `; 
+            document.body.appendChild(mdiv); 
+            document.getElementById('cancelBatch').onclick=()=>mdiv.remove(); 
+            document.getElementById('doBatch').onclick=()=>{ 
+                importBatchData(document.getElementById('batchTextArea').value); 
+                mdiv.remove(); 
+            }; 
+        });
         document.getElementById('batchExportBtn')?.addEventListener('click', exportBatchData);
         document.getElementById('toggleArchiveBtn')?.addEventListener('click', toggleArchiveCurrent);
         document.getElementById('viewSelectedProjectBtn')?.addEventListener('click', () => { const code=document.getElementById('projectSelect').value; if(code) openViewer(code); else showToast("請選擇專案",true); });

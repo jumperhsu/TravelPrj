@@ -33,6 +33,7 @@
             --modal-bg: white;
             --button-outline-border: #cbd5e1;
             --button-outline-text: #1e293b;
+            --shadow-color: rgba(0,0,0,0.08);
         }
 
         /* ---------- 海洋主題 (ocean) ---------- */
@@ -58,6 +59,7 @@
             --modal-bg: white;
             --button-outline-border: #7dd3fc;
             --button-outline-text: #0369a1;
+            --shadow-color: rgba(2, 132, 199, 0.10);
         }
 
         /* ---------- 森林主題 (forest) ---------- */
@@ -83,9 +85,10 @@
             --modal-bg: white;
             --button-outline-border: #86efac;
             --button-outline-text: #166534;
+            --shadow-color: rgba(22, 163, 74, 0.10);
         }
 
-        /* ---------- 日落主題 (sunset) ---------- */
+        /* ---------- 暖陽主題 (sunset) ---------- */
         [data-theme="sunset"] {
             --bg-body: #fff3e6;
             --bg-header: #ffffff;
@@ -108,9 +111,62 @@
             --modal-bg: white;
             --button-outline-border: #fdba74;
             --button-outline-text: #9a3412;
+            --shadow-color: rgba(234, 88, 12, 0.10);
         }
 
-        /* ---------- 暗夜主題 (night) ---------- */
+        /* ---------- 薰衣草主題 (lavender) ---------- */
+        [data-theme="lavender"] {
+            --bg-body: #f3edff;
+            --bg-header: #ffffff;
+            --border-header: #d8c8f0;
+            --text-header: #4a2a6a;
+            --bg-tab-inactive: #ede6f7;
+            --text-tab-inactive: #5a3a7a;
+            --bg-tab-active: #7a4a9e;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(122, 74, 158, 0.12);
+            --tab-shadow-hover: 0 6px 12px rgba(122, 74, 158, 0.18);
+            --bg-sub-wrapper: #f8f4ff;
+            --border-sub: #d4c4e8;
+            --bg-sub-tab-inactive: #ddd0f0;
+            --text-sub-tab-inactive: #5a3a7a;
+            --bg-sub-tab-active: #7a4a9e;
+            --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #d4c4e8;
+            --iframe-bg: #ede6f7;
+            --modal-bg: white;
+            --button-outline-border: #c4b0d8;
+            --button-outline-text: #4a2a6a;
+            --shadow-color: rgba(122, 74, 158, 0.10);
+        }
+
+        /* ---------- 櫻花主題 (sakura) ---------- */
+        [data-theme="sakura"] {
+            --bg-body: #fff0f2;
+            --bg-header: #ffffff;
+            --border-header: #f5c8d0;
+            --text-header: #6a2a3a;
+            --bg-tab-inactive: #fde8ec;
+            --text-tab-inactive: #7a3a4a;
+            --bg-tab-active: #c45a6a;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(196, 90, 106, 0.12);
+            --tab-shadow-hover: 0 6px 12px rgba(196, 90, 106, 0.18);
+            --bg-sub-wrapper: #fff5f7;
+            --border-sub: #f5c8d0;
+            --bg-sub-tab-inactive: #f5d0d8;
+            --text-sub-tab-inactive: #7a3a4a;
+            --bg-sub-tab-active: #c45a6a;
+            --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #f0c8d0;
+            --iframe-bg: #fde8ec;
+            --modal-bg: white;
+            --button-outline-border: #e8b0b8;
+            --button-outline-text: #6a2a3a;
+            --shadow-color: rgba(196, 90, 106, 0.10);
+        }
+
+        /* ---------- 夜空主題 (night) ---------- */
         [data-theme="night"] {
             --bg-body: #0b1120;
             --bg-header: #1e293b;
@@ -133,6 +189,7 @@
             --modal-bg: #1e293b;
             --button-outline-border: #64748b;
             --button-outline-text: #cbd5e1;
+            --shadow-color: rgba(0, 0, 0, 0.3);
         }
 
         body {
@@ -140,7 +197,7 @@
             background: var(--bg-body);
             height: 100vh;
             overflow: hidden;
-            transition: background 0.2s ease;
+            transition: background 0.3s ease;
         }
         .viewer-container {
             display: flex;
@@ -156,6 +213,7 @@
             align-items: center;
             flex-shrink: 0;
             backdrop-filter: blur(2px);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .viewer-header h1 {
             font-size: 1.5rem;
@@ -173,6 +231,7 @@
             padding: 0.75rem 1.5rem 0 1.5rem;
             position: relative;
             z-index: 2;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .viewer-tabs-scroll {
             overflow-x: auto;
@@ -207,7 +266,7 @@
             background: var(--bg-tab-active);
             color: var(--text-tab-active);
             transform: scale(1.02);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 6px 14px var(--shadow-color);
             font-weight: 600;
         }
         .viewer-sub-tabs-wrapper {
@@ -217,6 +276,7 @@
             padding: 0.5rem 1.5rem 0 1.5rem;
             position: relative;
             z-index: 1;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .viewer-sub-tabs-list {
             display: flex;
@@ -245,13 +305,14 @@
         .viewer-sub-tab.active {
             background: var(--bg-sub-tab-active);
             color: var(--text-sub-tab-active);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 3px 8px var(--shadow-color);
             font-weight: 550;
         }
         .iframe-container {
             flex: 1;
             background: var(--iframe-bg);
             position: relative;
+            transition: background 0.3s ease;
         }
         iframe {
             width: 100%;
@@ -283,6 +344,7 @@
             align-items: center;
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.25);
             font-weight: 500;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         .spinner-circle {
             width: 1.5rem;
@@ -314,6 +376,7 @@
             text-align: center;
             border: 1px solid var(--border-header);
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .modal-content .logo {
             display: flex;
@@ -322,6 +385,9 @@
             margin: 16px 0;
             font-size: 1.2rem;
         }
+        .modal-content a {
+            color: var(--bg-tab-active);
+        }
         button.outline {
             background: transparent;
             border: 1px solid var(--button-outline-border);
@@ -329,7 +395,7 @@
             padding: 6px 16px;
             border-radius: 60px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             font-weight: 500;
         }
         button.outline:hover {
@@ -407,7 +473,7 @@
     const projectCode = params.get('projectCode');
     if (!projectCode) {
         document.getElementById('viewerTitle').innerText = '缺少專案代碼';
-        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;">❌ 無效連結</body></html>';
+        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效連結</body></html>';
     } else {
         loadProject(projectCode);
     }
@@ -510,7 +576,7 @@
             renderTabsWithSmartRules(code, mainItems);
         } catch (err) {
             document.getElementById('viewerTitle').innerText = '載入失敗';
-            document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;">⚠️ ${err.message}</body></html>`;
+            document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">⚠️ ${err.message}</body></html>`;
         }
     }
 
@@ -532,7 +598,7 @@
             showLoading();
             iframe.onload = () => { hideLoading(); };
             iframe.onerror = () => {
-                iframe.srcdoc = `<html><body style="background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;">⚠️ 無法載入該網址</body></html>`;
+                iframe.srcdoc = `<html><body style="background:var(--bg-body);color:var(--text-header);display:flex;align-items:center;justify-content:center;font-family:sans-serif;">⚠️ 無法載入該網址</body></html>`;
                 hideLoading();
             };
             iframe.src = url;
