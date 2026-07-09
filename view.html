@@ -218,11 +218,9 @@
         .viewer-header h1 {
             font-size: 1.5rem;
             font-weight: 600;
-            background: linear-gradient(135deg, var(--text-header) 0%, var(--bg-tab-active) 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
+            color: var(--text-header);
             letter-spacing: -0.3px;
+            transition: color 0.3s ease;
         }
         .viewer-tabs-wrapper {
             background: var(--bg-header);
@@ -402,6 +400,14 @@
             background: color-mix(in srgb, var(--button-outline-border) 20%, transparent);
             transform: scale(0.97);
         }
+        .loading-title {
+            opacity: 0.6;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
         @media (max-width: 640px) {
             .viewer-tabs-wrapper { padding: 0.5rem 0.8rem 0 0.8rem; }
             .viewer-sub-tabs-wrapper { padding: 0.3rem 0.8rem 0 0.8rem; }
@@ -434,7 +440,7 @@
 <body>
 <div class="viewer-container">
     <div class="viewer-header">
-        <h1 id="viewerTitle">載入中...</h1>
+        <h1 id="viewerTitle"><span class="loading-title">⏳ 載入中...</span></h1>
         <button id="aboutBtn" class="outline">ℹ️ 關於</button>
     </div>
     <div class="viewer-tabs-wrapper">
@@ -472,7 +478,7 @@
     const params = new URLSearchParams(window.location.search);
     const projectCode = params.get('projectCode');
     if (!projectCode) {
-        document.getElementById('viewerTitle').innerText = '缺少專案代碼';
+        document.getElementById('viewerTitle').innerText = '❌ 缺少專案代碼';
         document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效連結</body></html>';
     } else {
         loadProject(projectCode);
@@ -560,8 +566,12 @@
 
             const theme = data.theme || 'default';
             document.documentElement.setAttribute('data-theme', theme);
-            document.getElementById('viewerTitle').innerText = data.projectName || '未命名專案';
-            document.title = data.projectName || '專案檢視模式';
+            
+            // ===== 修改：顯示專案名稱，移除「載入中...」 =====
+            const projectName = data.projectName || '未命名專案';
+            document.getElementById('viewerTitle').innerText = projectName;
+            document.title = projectName + ' | 專案檢視模式';
+            
             const mainItems = data.mainItems || [];
             mainItems.forEach(item => {
                 if (item.isTrip === undefined) item.isTrip = false;
@@ -575,7 +585,7 @@
             });
             renderTabsWithSmartRules(code, mainItems);
         } catch (err) {
-            document.getElementById('viewerTitle').innerText = '載入失敗';
+            document.getElementById('viewerTitle').innerText = '⚠️ 載入失敗';
             document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">⚠️ ${err.message}</body></html>`;
         }
     }
