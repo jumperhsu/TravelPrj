@@ -192,6 +192,84 @@
             --shadow-color: rgba(0, 0, 0, 0.3);
         }
 
+        /* ===== 新增：楓葉 (maple) ===== */
+        [data-theme="maple"] {
+            --bg-body: #fdf6ee;
+            --bg-header: #fdf6ee;
+            --border-header: #d4a373;
+            --text-header: #7a3e1a;
+            --bg-tab-inactive: #fae9d6;
+            --text-tab-inactive: #7a3e1a;
+            --bg-tab-active: #b45f2a;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(180, 95, 42, 0.15);
+            --tab-shadow-hover: 0 6px 12px rgba(180, 95, 42, 0.25);
+            --bg-sub-wrapper: #fdf6ee;
+            --border-sub: #e8c9aa;
+            --bg-sub-tab-inactive: #f0d5b8;
+            --text-sub-tab-inactive: #7a3e1a;
+            --bg-sub-tab-active: #b45f2a;
+            --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #e8c9aa;
+            --iframe-bg: #fae9d6;
+            --modal-bg: #fdf6ee;
+            --button-outline-border: #d4a373;
+            --button-outline-text: #7a3e1a;
+            --shadow-color: rgba(180, 95, 42, 0.15);
+        }
+
+        /* ===== 新增：銀杏 (ginkgo) ===== */
+        [data-theme="ginkgo"] {
+            --bg-body: #fcf9f0;
+            --bg-header: #fcf9f0;
+            --border-header: #d4b87a;
+            --text-header: #6a5a1a;
+            --bg-tab-inactive: #f5edd6;
+            --text-tab-inactive: #6a5a1a;
+            --bg-tab-active: #b49a3a;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(180, 154, 58, 0.15);
+            --tab-shadow-hover: 0 6px 12px rgba(180, 154, 58, 0.25);
+            --bg-sub-wrapper: #fcf9f0;
+            --border-sub: #e6d8aa;
+            --bg-sub-tab-inactive: #ede0b8;
+            --text-sub-tab-inactive: #6a5a1a;
+            --bg-sub-tab-active: #b49a3a;
+            --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #e6d8aa;
+            --iframe-bg: #f5edd6;
+            --modal-bg: #fcf9f0;
+            --button-outline-border: #d4b87a;
+            --button-outline-text: #6a5a1a;
+            --shadow-color: rgba(180, 154, 58, 0.15);
+        }
+
+        /* ===== 新增：楓葉+銀杏混合 (maple-ginkgo) ===== */
+        [data-theme="maple-ginkgo"] {
+            --bg-body: #fdf7ed;
+            --bg-header: #fdf7ed;
+            --border-header: #c9a87a;
+            --text-header: #6a4a1a;
+            --bg-tab-inactive: #f5e8d0;
+            --text-tab-inactive: #6a4a1a;
+            --bg-tab-active: #b48a3a;
+            --text-tab-active: white;
+            --tab-shadow: 0 2px 8px rgba(180, 138, 58, 0.15);
+            --tab-shadow-hover: 0 6px 12px rgba(180, 138, 58, 0.25);
+            --bg-sub-wrapper: #fdf7ed;
+            --border-sub: #e4d0aa;
+            --bg-sub-tab-inactive: #ebdbb8;
+            --text-sub-tab-inactive: #6a4a1a;
+            --bg-sub-tab-active: #b48a3a;
+            --text-sub-tab-active: white;
+            --bg-sub-tab-hover: #e4d0aa;
+            --iframe-bg: #f5e8d0;
+            --modal-bg: #fdf7ed;
+            --button-outline-border: #c9a87a;
+            --button-outline-text: #6a4a1a;
+            --shadow-color: rgba(180, 138, 58, 0.15);
+        }
+
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg-body);
@@ -567,7 +645,7 @@
             const theme = data.theme || 'default';
             document.documentElement.setAttribute('data-theme', theme);
             
-            // ===== 修改：顯示專案名稱，移除「載入中...」 =====
+            // 顯示專案名稱
             const projectName = data.projectName || '未命名專案';
             document.getElementById('viewerTitle').innerText = projectName;
             document.title = projectName + ' | 專案檢視模式';
@@ -653,9 +731,7 @@
             subItems.forEach(sub => {
                 const subBtn = document.createElement('button');
                 subBtn.className = 'viewer-sub-tab';
-                // 行程模式的子項目: 只顯示名稱，不附加日期 (改善體驗)
                 let displayName = sub.name;
-                // 若為總覽且是行程模式，可加個小圖示但不影響長度
                 if (mainItem.isTrip && sub.isOverview && !displayName.includes('📋')) {
                     displayName = `📋 ${displayName}`;
                 }
@@ -725,7 +801,7 @@
         }
     }
 
-    // 關於視窗
+    // 關於視窗 (更新版，包含新主題說明)
     function showAboutModal() {
         if (document.querySelector('.modal')) return;
         const modal = document.createElement('div');
@@ -738,9 +814,12 @@
                     <span>🧠 智慧記憶</span>
                     <span>📅 行程日期對應</span>
                 </div>
+                <p style="margin-top:8px; font-size:0.9rem;">
+                    🍁 楓葉 · 🌿 銀杏 · 🍁🌿 楓葉+銀杏
+                </p>
                 <p>構想聯繫：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
                 <p>設計開發：DeepSeek</p>
-                <p>版本：<strong>2026.05.15 行程頁籤簡潔版</strong></p>
+                <p>版本：<strong>2026.05.15 行程頁籤簡潔版 + 新主題</strong></p>
                 <p style="font-size:0.75rem; margin-top:12px;">✓ 行程子頁籤只顯示名稱，不顯示日期<br>✓ 行程區間自動跳轉今日頁籤<br>✓ 記憶與智慧規則並存</p>
                 <button id="closeAboutBtn" class="outline" style="margin-top: 20px;">關閉視窗</button>
             </div>

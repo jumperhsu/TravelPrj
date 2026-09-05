@@ -68,13 +68,11 @@
         hr { margin: 20px 0; border-color: #eef2fa; }
         @media (max-width: 640px) { .panel { padding: 16px; } .modal-content { padding: 20px; } }
 
-        /* ===== 風格主題樣式 ===== */
-        /* 預設 (default) */
+        /* ===== 原有主題 ===== */
         .theme-default .main-item-card { border-color: #eef2f9; }
         .theme-default .main-item-header { background: #fefefe; }
         .theme-default .sub-tab.active { background: #2c3e66; }
 
-        /* 海洋 (ocean) */
         .theme-ocean .main-item-card { border-color: #b3d9e8; background: #f0f9ff; }
         .theme-ocean .main-item-header { background: #e3f0f7; }
         .theme-ocean .main-item-header .title { color: #0a4b6e; }
@@ -84,7 +82,6 @@
         .theme-ocean .trip-range-badge { background: #b3d9e8; color: #0a4b6e; }
         .theme-ocean .panel { background: rgba(240, 249, 255, 0.98); }
 
-        /* 森林 (forest) */
         .theme-forest .main-item-card { border-color: #a8c4a8; background: #f0f7ee; }
         .theme-forest .main-item-header { background: #e2eee0; }
         .theme-forest .main-item-header .title { color: #2d5a2d; }
@@ -94,7 +91,6 @@
         .theme-forest .trip-range-badge { background: #a8c4a8; color: #2d5a2d; }
         .theme-forest .panel { background: rgba(240, 247, 238, 0.98); }
 
-        /* 暖陽 (sunset) */
         .theme-sunset .main-item-card { border-color: #f5d4c4; background: #fff6f0; }
         .theme-sunset .main-item-header { background: #fdede6; }
         .theme-sunset .main-item-header .title { color: #8a4a2a; }
@@ -104,7 +100,6 @@
         .theme-sunset .trip-range-badge { background: #f5d4c4; color: #8a4a2a; }
         .theme-sunset .panel { background: rgba(255, 246, 240, 0.98); }
 
-        /* 薰衣草 (lavender) */
         .theme-lavender .main-item-card { border-color: #d4c4e8; background: #f8f4ff; }
         .theme-lavender .main-item-header { background: #ede6f7; }
         .theme-lavender .main-item-header .title { color: #5a3a7a; }
@@ -114,7 +109,6 @@
         .theme-lavender .trip-range-badge { background: #d4c4e8; color: #5a3a7a; }
         .theme-lavender .panel { background: rgba(248, 244, 255, 0.98); }
 
-        /* 櫻花 (sakura) */
         .theme-sakura .main-item-card { border-color: #f5c8d0; background: #fff5f7; }
         .theme-sakura .main-item-header { background: #fde8ec; }
         .theme-sakura .main-item-header .title { color: #7a3a4a; }
@@ -124,7 +118,6 @@
         .theme-sakura .trip-range-badge { background: #f5c8d0; color: #7a3a4a; }
         .theme-sakura .panel { background: rgba(255, 245, 247, 0.98); }
 
-        /* 夜空 (night) */
         .theme-night .main-item-card { border-color: #4a5a7a; background: #1a2a3e; }
         .theme-night .main-item-header { background: #2a3a5a; }
         .theme-night .main-item-header .title { color: #c8d8f0; }
@@ -164,6 +157,120 @@
         .theme-night .sub-item-header { background: #1a2a3e; }
         .theme-night hr { border-color: #4a5a7a; }
         .theme-night .status-bar { background: #3a2a2a; border-left-color: #e87a7a; color: #c8d8f0; }
+
+        /* ===== 新增：楓葉 (maple) ===== */
+        .theme-maple .main-item-card { border-color: #d4a373; background: #fdf6ee; }
+        .theme-maple .main-item-header { background: #fae9d6; }
+        .theme-maple .main-item-header .title { color: #7a3e1a; }
+        .theme-maple .sub-tab { background: #f0d5b8; color: #7a3e1a; }
+        .theme-maple .sub-tab.active { background: #b45f2a; color: white; }
+        .theme-maple .badge { background: #e8c9aa; color: #7a3e1a; }
+        .theme-maple .trip-range-badge { background: #d4a373; color: #5a2e12; }
+        .theme-maple .panel { background: rgba(253, 246, 238, 0.98); }
+        .theme-maple .panel-header { border-bottom-color: #e8c9aa; }
+        .theme-maple h1 { background: linear-gradient(135deg, #7a3e1a, #b45f2a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .theme-maple h2 { color: #7a3e1a; }
+        .theme-maple .sub-item-card { background: #fdf6ee; border-color: #e8c9aa; }
+        .theme-maple .sub-item-header { background: #fae9d6; color: #7a3e1a; }
+        .theme-maple .sub-item-detail { background: #fdf6ee; color: #7a3e1a; }
+        .theme-maple .unarchived-quick { background: #fae9d6; border-color: #e8c9aa; color: #7a3e1a; }
+        .theme-maple .project-chip { background: #fdf6ee; border-color: #d4a373; color: #7a3e1a; }
+        .theme-maple .project-chip:hover { background: #b45f2a; color: white; }
+        .theme-maple .date-range-group { background: #fae9d6; }
+        .theme-maple input, .theme-maple select, .theme-maple textarea { background: #fdf6ee; border-color: #d4a373; color: #3d1f0d; }
+        .theme-maple input:focus { border-color: #b45f2a; }
+        .theme-maple .checkbox-label { background: #fae9d6; color: #7a3e1a; }
+        .theme-maple .lock-indicator { background: #f5d4b8; color: #b45f2a; }
+        .theme-maple .modal-content { background: #fdf6ee; color: #3d1f0d; }
+        .theme-maple .modal-header { border-bottom-color: #e8c9aa; }
+        .theme-maple .close-btn { color: #7a3e1a; }
+        .theme-maple .sub-editor-card { background: #fdf6ee; border-color: #e8c9aa; }
+        .theme-maple .sub-editor-header { background: #fae9d6; color: #7a3e1a; }
+        .theme-maple .sub-editor-header strong { color: #7a3e1a; }
+        .theme-maple .sub-editor-body { border-top-color: #e8c9aa; }
+        .theme-maple button.outline { border-color: #d4a373; color: #7a3e1a; }
+        .theme-maple button.outline:hover { background: #fae9d6; border-color: #b45f2a; }
+        .theme-maple .sub-tabs { border-bottom-color: #e8c9aa; }
+        .theme-maple .sub-item-card { background: #fdf6ee; border-color: #e8c9aa; }
+        .theme-maple .sub-item-header { background: #fae9d6; }
+        .theme-maple hr { border-color: #e8c9aa; }
+        .theme-maple .status-bar { background: #f5d4b8; border-left-color: #b45f2a; color: #7a3e1a; }
+
+        /* ===== 新增：銀杏 (ginkgo) ===== */
+        .theme-ginkgo .main-item-card { border-color: #d4b87a; background: #fcf9f0; }
+        .theme-ginkgo .main-item-header { background: #f5edd6; }
+        .theme-ginkgo .main-item-header .title { color: #6a5a1a; }
+        .theme-ginkgo .sub-tab { background: #ede0b8; color: #6a5a1a; }
+        .theme-ginkgo .sub-tab.active { background: #b49a3a; color: white; }
+        .theme-ginkgo .badge { background: #e6d8aa; color: #6a5a1a; }
+        .theme-ginkgo .trip-range-badge { background: #d4b87a; color: #4a3a0d; }
+        .theme-ginkgo .panel { background: rgba(252, 249, 240, 0.98); }
+        .theme-ginkgo .panel-header { border-bottom-color: #e6d8aa; }
+        .theme-ginkgo h1 { background: linear-gradient(135deg, #6a5a1a, #b49a3a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .theme-ginkgo h2 { color: #6a5a1a; }
+        .theme-ginkgo .sub-item-card { background: #fcf9f0; border-color: #e6d8aa; }
+        .theme-ginkgo .sub-item-header { background: #f5edd6; color: #6a5a1a; }
+        .theme-ginkgo .sub-item-detail { background: #fcf9f0; color: #6a5a1a; }
+        .theme-ginkgo .unarchived-quick { background: #f5edd6; border-color: #e6d8aa; color: #6a5a1a; }
+        .theme-ginkgo .project-chip { background: #fcf9f0; border-color: #d4b87a; color: #6a5a1a; }
+        .theme-ginkgo .project-chip:hover { background: #b49a3a; color: white; }
+        .theme-ginkgo .date-range-group { background: #f5edd6; }
+        .theme-ginkgo input, .theme-ginkgo select, .theme-ginkgo textarea { background: #fcf9f0; border-color: #d4b87a; color: #3d2f0d; }
+        .theme-ginkgo input:focus { border-color: #b49a3a; }
+        .theme-ginkgo .checkbox-label { background: #f5edd6; color: #6a5a1a; }
+        .theme-ginkgo .lock-indicator { background: #f0e4b8; color: #b49a3a; }
+        .theme-ginkgo .modal-content { background: #fcf9f0; color: #3d2f0d; }
+        .theme-ginkgo .modal-header { border-bottom-color: #e6d8aa; }
+        .theme-ginkgo .close-btn { color: #6a5a1a; }
+        .theme-ginkgo .sub-editor-card { background: #fcf9f0; border-color: #e6d8aa; }
+        .theme-ginkgo .sub-editor-header { background: #f5edd6; color: #6a5a1a; }
+        .theme-ginkgo .sub-editor-header strong { color: #6a5a1a; }
+        .theme-ginkgo .sub-editor-body { border-top-color: #e6d8aa; }
+        .theme-ginkgo button.outline { border-color: #d4b87a; color: #6a5a1a; }
+        .theme-ginkgo button.outline:hover { background: #f5edd6; border-color: #b49a3a; }
+        .theme-ginkgo .sub-tabs { border-bottom-color: #e6d8aa; }
+        .theme-ginkgo .sub-item-card { background: #fcf9f0; border-color: #e6d8aa; }
+        .theme-ginkgo .sub-item-header { background: #f5edd6; }
+        .theme-ginkgo hr { border-color: #e6d8aa; }
+        .theme-ginkgo .status-bar { background: #f0e4b8; border-left-color: #b49a3a; color: #6a5a1a; }
+
+        /* ===== 新增：楓葉+銀杏混合 (maple-ginkgo) ===== */
+        .theme-maple-ginkgo .main-item-card { border-color: #c9a87a; background: #fdf7ed; }
+        .theme-maple-ginkgo .main-item-header { background: #f5e8d0; }
+        .theme-maple-ginkgo .main-item-header .title { color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-tab { background: #ebdbb8; color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-tab.active { background: #b48a3a; color: white; }
+        .theme-maple-ginkgo .badge { background: #e4d0aa; color: #6a4a1a; }
+        .theme-maple-ginkgo .trip-range-badge { background: #c9a87a; color: #4a3010; }
+        .theme-maple-ginkgo .panel { background: rgba(253, 247, 237, 0.98); }
+        .theme-maple-ginkgo .panel-header { border-bottom-color: #e4d0aa; }
+        .theme-maple-ginkgo h1 { background: linear-gradient(135deg, #7a3e1a, #b48a3a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .theme-maple-ginkgo h2 { color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-item-card { background: #fdf7ed; border-color: #e4d0aa; }
+        .theme-maple-ginkgo .sub-item-header { background: #f5e8d0; color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-item-detail { background: #fdf7ed; color: #6a4a1a; }
+        .theme-maple-ginkgo .unarchived-quick { background: #f5e8d0; border-color: #e4d0aa; color: #6a4a1a; }
+        .theme-maple-ginkgo .project-chip { background: #fdf7ed; border-color: #c9a87a; color: #6a4a1a; }
+        .theme-maple-ginkgo .project-chip:hover { background: #b48a3a; color: white; }
+        .theme-maple-ginkgo .date-range-group { background: #f5e8d0; }
+        .theme-maple-ginkgo input, .theme-maple-ginkgo select, .theme-maple-ginkgo textarea { background: #fdf7ed; border-color: #c9a87a; color: #3d2a10; }
+        .theme-maple-ginkgo input:focus { border-color: #b48a3a; }
+        .theme-maple-ginkgo .checkbox-label { background: #f5e8d0; color: #6a4a1a; }
+        .theme-maple-ginkgo .lock-indicator { background: #f0ddb8; color: #b48a3a; }
+        .theme-maple-ginkgo .modal-content { background: #fdf7ed; color: #3d2a10; }
+        .theme-maple-ginkgo .modal-header { border-bottom-color: #e4d0aa; }
+        .theme-maple-ginkgo .close-btn { color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-editor-card { background: #fdf7ed; border-color: #e4d0aa; }
+        .theme-maple-ginkgo .sub-editor-header { background: #f5e8d0; color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-editor-header strong { color: #6a4a1a; }
+        .theme-maple-ginkgo .sub-editor-body { border-top-color: #e4d0aa; }
+        .theme-maple-ginkgo button.outline { border-color: #c9a87a; color: #6a4a1a; }
+        .theme-maple-ginkgo button.outline:hover { background: #f5e8d0; border-color: #b48a3a; }
+        .theme-maple-ginkgo .sub-tabs { border-bottom-color: #e4d0aa; }
+        .theme-maple-ginkgo .sub-item-card { background: #fdf7ed; border-color: #e4d0aa; }
+        .theme-maple-ginkgo .sub-item-header { background: #f5e8d0; }
+        .theme-maple-ginkgo hr { border-color: #e4d0aa; }
+        .theme-maple-ginkgo .status-bar { background: #f0ddb8; border-left-color: #b48a3a; color: #6a4a1a; }
     </style>
 </head>
 <body>
@@ -302,7 +409,7 @@
         applyTheme();
     }
     
-    // ===== 新增：套用主題函數 =====
+    // ===== 套用主題函數 =====
     function applyTheme() {
         const container = document.getElementById('appContainer');
         if (!container) return;
@@ -312,7 +419,6 @@
             container.classList.add('theme-' + currentProject.theme);
         }
     }
-    // ===== 主題函數結束 =====
     
     function normalizeProject() { if (!currentProject) return; currentProject.mainItems.forEach(item => { if (!item.subItems) item.subItems = []; if (item.isTrip===undefined) item.isTrip=false; if (item.tripStartDate===undefined) item.tripStartDate=''; if (item.tripEndDate===undefined) item.tripEndDate=''; item.subItems.forEach(sub=>{ if(sub.date===undefined) sub.date=''; if(sub.isOverview===undefined) sub.isOverview=false; }); }); }
     function renderProjectSelect() { const sel=document.getElementById('projectSelect'); if(!sel) return; sel.innerHTML='<option value="">-- 選擇專案 --</option>'; const unarchived=allProjects.filter(p=>!p.archived); const archived=allProjects.filter(p=>p.archived); const add=(list,label)=>{ if(!list.length) return; const g=document.createElement('optgroup'); g.label=label; list.forEach(p=>{ const opt=document.createElement('option'); opt.value=p.projectCode; opt.textContent=`${p.projectName}${p.locked?' 🔒':''}${p.archived?' (已歸檔)':''}`; g.appendChild(opt); }); sel.appendChild(g); }; add(unarchived,'📂 未歸檔'); add(archived,'📦 已歸檔'); if(currentEditProjectCode) sel.value=currentEditProjectCode; }
@@ -323,7 +429,7 @@
     async function toggleLock() { if(!currentProject) return; currentProject.locked=!currentProject.locked; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); await saveAllProjectsToDB(); renderEditorList(); renderProjectSelect(); renderUnarchivedChips(); showToast(currentProject.locked?"🔒已鎖定":"🔓已解鎖"); }
     async function updateProjectTheme(theme) { if(!currentProject) return; currentProject.theme=theme; const idx=allProjects.findIndex(p=>p.projectCode===currentEditProjectCode); if(idx!==-1) allProjects[idx]=JSON.parse(JSON.stringify(currentProject)); await saveAllProjectsToDB(); applyTheme(); showToast(`🎨 風格已更新為: ${getThemeName(theme)}`); }
     
-    // ===== 新增：取得主題名稱 =====
+    // ===== 取得主題名稱 =====
     function getThemeName(theme) {
         const names = {
             'default': '預設',
@@ -332,13 +438,15 @@
             'sunset': '暖陽',
             'lavender': '薰衣草',
             'sakura': '櫻花',
-            'night': '夜空'
+            'night': '夜空',
+            'maple': '楓葉',
+            'ginkgo': '銀杏',
+            'maple-ginkgo': '楓葉+銀杏'
         };
         return names[theme] || theme;
     }
-    // ===== 主題名稱函數結束 =====
 
-    // 光箱編輯主項目 — 子項目標題直接顯示有意義的名稱 (不再只顯示「子項目」)
+    // 光箱編輯主項目 — 子項目標題直接顯示有意義的名稱
     function openMainItemModal(mainIndex) {
         if (currentProject.locked) { showToast("專案已鎖定，無法編輯", true); return; }
         const original = currentProject.mainItems[mainIndex];
@@ -352,7 +460,6 @@
             const startDate = working.tripStartDate || '';
             const endDate = working.tripEndDate || '';
             const subs = working.subItems || [];
-            // 產生可讀標題：優先顯示名稱，若名稱是「子項目」之類則加上識別
             const subsHtml = subs.map((sub, idx) => {
                 let displayTitle = sub.name.trim() || (sub.isOverview ? "總覽" : (sub.date ? `Day ${idx}` : "未命名"));
                 if (!sub.isOverview && sub.date && !displayTitle.startsWith("Day")) displayTitle = `${displayTitle} (${formatDisplayDate(sub.date)})`;
@@ -508,6 +615,9 @@
                         <option value="lavender" ${currentProject.theme==='lavender'?'selected':''}>💜 薰衣草</option>
                         <option value="sakura" ${currentProject.theme==='sakura'?'selected':''}>🌸 櫻花</option>
                         <option value="night" ${currentProject.theme==='night'?'selected':''}>🌙 夜空</option>
+                        <option value="maple" ${currentProject.theme==='maple'?'selected':''}>🍁 楓葉</option>
+                        <option value="ginkgo" ${currentProject.theme==='ginkgo'?'selected':''}>🌿 銀杏</option>
+                        <option value="maple-ginkgo" ${currentProject.theme==='maple-ginkgo'?'selected':''}>🍁🌿 楓葉+銀杏</option>
                     </select>
                 </div>
                 ${locked?'<div class="lock-indicator">🔒 鎖定狀態，僅可瀏覽內容與連結 (可複製)</div>':''}
@@ -575,7 +685,6 @@
             document.querySelectorAll('.sub-tab').forEach(tab => { if (tab.closest('.main-item-detail')?.querySelector('.sub-tab')) tab.classList.add('active'); tab.closest('.main-item-detail')?.querySelector('.sub-panel')?.classList.add('active'); });
         }, 50);
         
-        // 套用主題
         applyTheme();
     }
 
@@ -698,7 +807,7 @@
         applyTheme();
         showToast("新專案建立 - 請在名稱欄位輸入新名稱"); 
     }
-    function showAboutModal() { const m=document.createElement('div'); m.className='modal'; m.innerHTML=`<div class="modal-content"><h3>✨ 光箱子項目清晰顯示</h3><p>✓ 子項目標題直接顯示「名稱」或「名稱(日期)」<br>✓ 全部收合/展開方便排序<br>✓ 鎖定時仍可瀏覽複製連結<br>✓ 行程區間自動產生每日頁籤</p><button id="closeAboutBtn">關閉</button></div>`; document.body.appendChild(m); document.getElementById('closeAboutBtn').onclick=()=>m.remove(); }
+    function showAboutModal() { const m=document.createElement('div'); m.className='modal'; m.innerHTML=`<div class="modal-content"><h3>✨ 光箱子項目清晰顯示</h3><p>✓ 子項目標題直接顯示「名稱」或「名稱(日期)」<br>✓ 全部收合/展開方便排序<br>✓ 鎖定時仍可瀏覽複製連結<br>✓ 行程區間自動產生每日頁籤<br>🍁 新增楓葉、銀杏、楓葉+銀杏 三種配色</p><button id="closeAboutBtn">關閉</button></div>`; document.body.appendChild(m); document.getElementById('closeAboutBtn').onclick=()=>m.remove(); }
     function openViewer(code) { window.open(`view.html?projectCode=${encodeURIComponent(code)}`, '_blank'); }
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
 
