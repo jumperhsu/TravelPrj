@@ -319,32 +319,59 @@
             display: flex;
             gap: 0.7rem;
         }
+
+        /* ===== 3D立體頁籤樣式 (範例 B：明顯縮減，高度約 30px) ===== */
         .viewer-tab {
-            background: var(--bg-tab-inactive);
-            border: none;
-            padding: 0.6rem 1.3rem;
+            padding: 0.2rem 0.9rem;
             font-size: 0.9rem;
             font-weight: 550;
-            border-radius: 40px;
+            border-radius: 36px;
+            border: none;
             color: var(--text-tab-inactive);
+            background: var(--bg-tab-inactive);
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: var(--tab-shadow);
-            backdrop-filter: blur(2px);
+            transition: all 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             letter-spacing: 0.3px;
+            transform: translateY(0px) scale(1);
+            box-shadow: 0 2px 0 color-mix(in srgb, var(--bg-tab-inactive) 60%, #000000),
+                        0 4px 8px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.4);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.2);
         }
         .viewer-tab:hover {
-            transform: translateY(-1px);
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 3px 0 color-mix(in srgb, var(--bg-tab-inactive) 50%, #000000),
+                        0 6px 12px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.5);
             background: color-mix(in srgb, var(--bg-tab-inactive) 85%, white);
-            box-shadow: var(--tab-shadow-hover);
+        }
+        .viewer-tab:active {
+            transform: translateY(3px) scale(0.98);
+            box-shadow: 0 1px 0 color-mix(in srgb, var(--bg-tab-inactive) 60%, #000000),
+                        0 2px 4px var(--shadow-color);
+            transition-duration: 0.05s;
         }
         .viewer-tab.active {
             background: var(--bg-tab-active);
             color: var(--text-tab-active);
-            transform: scale(1.02);
-            box-shadow: 0 6px 14px var(--shadow-color);
+            transform: translateY(-1px) scale(1.04);
+            box-shadow: 0 3px 0 color-mix(in srgb, var(--bg-tab-active) 50%, #000000),
+                        0 8px 16px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             font-weight: 600;
         }
+        .viewer-tab.active:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 0 color-mix(in srgb, var(--bg-tab-active) 50%, #000000),
+                        0 10px 20px var(--shadow-color);
+        }
+        .viewer-tab.active:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 1px 0 color-mix(in srgb, var(--bg-tab-active) 50%, #000000),
+                        0 3px 6px var(--shadow-color);
+        }
+
         .viewer-sub-tabs-wrapper {
             background: var(--bg-sub-wrapper);
             border-bottom: 1px solid var(--border-sub);
@@ -361,29 +388,57 @@
             flex-wrap: wrap;
         }
         .viewer-sub-tab {
-            background: var(--bg-sub-tab-inactive);
-            border: none;
-            padding: 0.45rem 1rem;
+            padding: 0.15rem 0.8rem;
             font-size: 0.78rem;
             font-weight: 500;
-            border-radius: 32px;
+            border-radius: 28px;
+            border: none;
             color: var(--text-sub-tab-inactive);
+            background: var(--bg-sub-tab-inactive);
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             letter-spacing: 0.2px;
             white-space: nowrap;
+            transform: translateY(0px) scale(1);
+            box-shadow: 0 2px 0 color-mix(in srgb, var(--bg-sub-tab-inactive) 60%, #000000),
+                        0 3px 6px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.3);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.15);
         }
         .viewer-sub-tab:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 3px 0 color-mix(in srgb, var(--bg-sub-tab-inactive) 50%, #000000),
+                        0 5px 10px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.4);
             background: var(--bg-sub-tab-hover);
-            transform: translateY(-1px);
+        }
+        .viewer-sub-tab:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 1px 0 color-mix(in srgb, var(--bg-sub-tab-inactive) 60%, #000000),
+                        0 2px 4px var(--shadow-color);
+            transition-duration: 0.05s;
         }
         .viewer-sub-tab.active {
             background: var(--bg-sub-tab-active);
             color: var(--text-sub-tab-active);
-            box-shadow: 0 3px 8px var(--shadow-color);
+            transform: translateY(-1px) scale(1.04);
+            box-shadow: 0 3px 0 color-mix(in srgb, var(--bg-sub-tab-active) 50%, #000000),
+                        0 6px 12px var(--shadow-color),
+                        inset 0 -1px 0 rgba(255,255,255,0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
             font-weight: 550;
         }
+        .viewer-sub-tab.active:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 0 color-mix(in srgb, var(--bg-sub-tab-active) 50%, #000000),
+                        0 8px 16px var(--shadow-color);
+        }
+        .viewer-sub-tab.active:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 1px 0 color-mix(in srgb, var(--bg-sub-tab-active) 50%, #000000),
+                        0 3px 6px var(--shadow-color);
+        }
+
         .iframe-container {
             flex: 1;
             background: var(--iframe-bg);
@@ -490,8 +545,8 @@
             .viewer-tabs-wrapper { padding: 0.5rem 0.8rem 0 0.8rem; }
             .viewer-sub-tabs-wrapper { padding: 0.3rem 0.8rem 0 0.8rem; }
             .viewer-header { padding: 10px 16px; }
-            .viewer-tab { padding: 0.45rem 1rem; font-size: 0.8rem; }
-            .viewer-sub-tab { padding: 0.35rem 0.8rem; font-size: 0.7rem; }
+            .viewer-tab { padding: 0.15rem 0.7rem; font-size: 0.8rem; border-radius: 28px; }
+            .viewer-sub-tab { padding: 0.1rem 0.6rem; font-size: 0.7rem; border-radius: 22px; }
         }
         .viewer-tabs-scroll::-webkit-scrollbar {
             height: 4px;
@@ -801,7 +856,7 @@
         }
     }
 
-    // 關於視窗 (更新版，包含新主題說明)
+    // 關於視窗
     function showAboutModal() {
         if (document.querySelector('.modal')) return;
         const modal = document.createElement('div');
@@ -817,10 +872,13 @@
                 <p style="margin-top:8px; font-size:0.9rem;">
                     🍁 楓葉 · 🌿 銀杏 · 🍁🌿 楓葉+銀杏
                 </p>
+                <p style="font-size:0.85rem; background:var(--bg-sub-wrapper); padding:6px 12px; border-radius:30px; display:inline-block; margin:6px 0;">
+                    🎯 頁籤 3D 立體化 · 緊湊版
+                </p>
                 <p>構想聯繫：<a href="mailto:jumper.hsu@gmail.com" style="color: var(--bg-tab-active);">jumper.hsu@gmail.com</a></p>
                 <p>設計開發：DeepSeek</p>
-                <p>版本：<strong>2026.05.15 行程頁籤簡潔版 + 新主題</strong></p>
-                <p style="font-size:0.75rem; margin-top:12px;">✓ 行程子頁籤只顯示名稱，不顯示日期<br>✓ 行程區間自動跳轉今日頁籤<br>✓ 記憶與智慧規則並存</p>
+                <p>版本：<strong>2026.05.15 3D立體頁籤 · 範例B</strong></p>
+                <p style="font-size:0.75rem; margin-top:12px;">✓ 行程子頁籤只顯示名稱，不顯示日期<br>✓ 行程區間自動跳轉今日頁籤<br>✓ 3D按壓回饋 · 頁籤高度明顯縮減</p>
                 <button id="closeAboutBtn" class="outline" style="margin-top: 20px;">關閉視窗</button>
             </div>
         `;
