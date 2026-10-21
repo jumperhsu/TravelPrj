@@ -282,6 +282,7 @@
             flex-direction: column;
             height: 100%;
         }
+        /* ===== 標題列（新增 10 秒自動收合動畫） ===== */
         .viewer-header {
             background: var(--bg-header);
             padding: 14px 24px;
@@ -291,7 +292,21 @@
             align-items: center;
             flex-shrink: 0;
             backdrop-filter: blur(2px);
-            transition: background 0.3s ease, border-color 0.3s ease;
+            overflow: hidden;
+            max-height: 72px;
+            opacity: 1;
+            transition: background 0.3s ease, border-color 0.3s ease,
+                        max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s ease;
+        }
+        .viewer-header.hidden {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            opacity: 0;
+            border-bottom-color: transparent;
+            pointer-events: none;
         }
         .viewer-header h1 {
             font-size: 1.5rem;
@@ -544,7 +559,7 @@
         @media (max-width: 640px) {
             .viewer-tabs-wrapper { padding: 0.5rem 0.8rem 0 0.8rem; }
             .viewer-sub-tabs-wrapper { padding: 0.3rem 0.8rem 0 0.8rem; }
-            .viewer-header { padding: 10px 16px; }
+            .viewer-header { padding: 10px 16px; max-height: 60px; }
             .viewer-tab { padding: 0.15rem 0.7rem; font-size: 0.8rem; border-radius: 28px; }
             .viewer-sub-tab { padding: 0.1rem 0.6rem; font-size: 0.7rem; border-radius: 22px; }
         }
@@ -572,7 +587,7 @@
 </head>
 <body>
 <div class="viewer-container">
-    <div class="viewer-header">
+    <div class="viewer-header" id="viewerHeader">
         <h1 id="viewerTitle"><span class="loading-title">⏳ 載入中...</span></h1>
         <button id="aboutBtn" class="outline">ℹ️ 關於</button>
     </div>
@@ -637,6 +652,35 @@
         if (!projectCode) return null;
         try { return localStorage.getItem(getStorageKey(projectCode, 'subTab')); } catch(e) { return null; }
     }
+
+    // ========== 標題列 10 秒自動隱藏 ==========
+    const HEADER_HIDE_DELAY = 10000;      // 10 秒
+    const REVEAL_ZONE_Y = 30;             // 游標移到視窗頂端 30px 內即重新顯示
+    const viewerHeaderEl = document.getElementById('viewerHeader');
+    let headerHideTimer = null;
+
+    function hideViewerHeader() {
+        viewerHeaderEl.classList.add('hidden');
+    }
+    function showViewerHeader() {
+        viewerHeaderEl.classList.remove('hidden');
+    }
+    // 每次切換頁籤時呼叫：立即顯示標題列，並重新倒數 10 秒
+    function resetHeaderAutoHide() {
+        if (!viewerHeaderEl) return;
+        clearTimeout(headerHideTimer);
+        showViewerHeader();
+        headerHideTimer = setTimeout(hideViewerHeader, HEADER_HIDE_DELAY);
+    }
+    // 隱藏後，把游標移到頂端 / 觸控頂端即可再次顯示
+    function revealHeaderIfNearTop(clientY) {
+        if (!viewerHeaderEl || !viewerHeaderEl.classList.contains('hidden')) return;
+        if (clientY <= REVEAL_ZONE_Y) resetHeaderAutoHide();
+    }
+    document.addEventListener('mousemove', (e) => revealHeaderIfNearTop(e.clientY));
+    document.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches[0]) revealHeaderIfNearTop(e.touches[0].clientY);
+    }, { passive: true });
 
     // 輔助: 解析日期 (支援 YYYY-MM-DD)
     function parseISODate(dateStr) {
@@ -754,6 +798,8 @@
         function switchToMainItem(mainItem, skipMemorySave = false) {
             if (!mainItem) return;
             if (!skipMemorySave) saveMainTabMemory(projectCode, mainItem.id);
+            // ★ 切換頁籤：重置標題列自動隱藏倒數
+            resetHeaderAutoHide();
             document.querySelectorAll('.viewer-tab').forEach(btn => btn.classList.remove('active'));
             const activeMainBtn = mainButtons.get(mainItem.id);
             if (activeMainBtn) activeMainBtn.classList.add('active');
@@ -795,6 +841,8 @@
                 subBtn.dataset.link = sub.link || '';
                 subBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    // ★ 切換子頁籤：重置標題列自動隱藏倒數
+                    resetHeaderAutoHide();
                     document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
                     subBtn.classList.add('active');
                     saveSubTabMemory(projectCode, sub.id);
