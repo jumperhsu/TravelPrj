@@ -282,7 +282,7 @@
             flex-direction: column;
             height: 100%;
         }
-        /* ===== 標題列（新增 10 秒自動收合動畫） ===== */
+        /* ===== 標題列（首次載入 10 秒後自動收合，之後不再出現） ===== */
         .viewer-header {
             background: var(--bg-header);
             padding: 14px 24px;
@@ -623,15 +623,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const params = new URLSearchParams(window.location.search);
-    const projectCode = params.get('projectCode');
-    if (!projectCode) {
-        document.getElementById('viewerTitle').innerText = '❌ 缺少專案代碼';
-        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效連結</body></html>';
-    } else {
-        loadProject(projectCode);
-    }
-
     // ========== 記憶核心 ==========
     function getStorageKey(projectCode, type) {
         return `viewer_memory_${projectCode}_${type}`;
@@ -653,34 +644,22 @@
         try { return localStorage.getItem(getStorageKey(projectCode, 'subTab')); } catch(e) { return null; }
     }
 
-    // ========== 標題列 10 秒自動隱藏 ==========
+    // ========== 標題列自動隱藏（僅首次載入啟動一次，之後永不再現） ==========
     const HEADER_HIDE_DELAY = 10000;      // 10 秒
-    const REVEAL_ZONE_Y = 30;             // 游標移到視窗頂端 30px 內即重新顯示
     const viewerHeaderEl = document.getElementById('viewerHeader');
     let headerHideTimer = null;
+    let initialHeaderTimerStarted = false;
 
     function hideViewerHeader() {
         viewerHeaderEl.classList.add('hidden');
     }
-    function showViewerHeader() {
-        viewerHeaderEl.classList.remove('hidden');
-    }
-    // 每次切換頁籤時呼叫：立即顯示標題列，並重新倒數 10 秒
-    function resetHeaderAutoHide() {
-        if (!viewerHeaderEl) return;
+    // 首次載入專用：只啟動一次
+    function startInitialHeaderHideTimer() {
+        if (initialHeaderTimerStarted) return;
+        initialHeaderTimerStarted = true;
         clearTimeout(headerHideTimer);
-        showViewerHeader();
         headerHideTimer = setTimeout(hideViewerHeader, HEADER_HIDE_DELAY);
     }
-    // 隱藏後，把游標移到頂端 / 觸控頂端即可再次顯示
-    function revealHeaderIfNearTop(clientY) {
-        if (!viewerHeaderEl || !viewerHeaderEl.classList.contains('hidden')) return;
-        if (clientY <= REVEAL_ZONE_Y) resetHeaderAutoHide();
-    }
-    document.addEventListener('mousemove', (e) => revealHeaderIfNearTop(e.clientY));
-    document.addEventListener('touchstart', (e) => {
-        if (e.touches && e.touches[0]) revealHeaderIfNearTop(e.touches[0].clientY);
-    }, { passive: true });
 
     // 輔助: 解析日期 (支援 YYYY-MM-DD)
     function parseISODate(dateStr) {
@@ -764,6 +743,8 @@
         } catch (err) {
             document.getElementById('viewerTitle').innerText = '⚠️ 載入失敗';
             document.getElementById('contentIframe').srcdoc = `<html><body style="background:#f8fafc;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">⚠️ ${err.message}</body></html>`;
+            // 載入失敗也讓標題列在 10 秒後自動隱藏
+            startInitialHeaderHideTimer();
         }
     }
 
@@ -798,8 +779,7 @@
         function switchToMainItem(mainItem, skipMemorySave = false) {
             if (!mainItem) return;
             if (!skipMemorySave) saveMainTabMemory(projectCode, mainItem.id);
-            // ★ 切換頁籤：重置標題列自動隱藏倒數
-            resetHeaderAutoHide();
+            // 切換頁籤不影響標題列狀態
             document.querySelectorAll('.viewer-tab').forEach(btn => btn.classList.remove('active'));
             const activeMainBtn = mainButtons.get(mainItem.id);
             if (activeMainBtn) activeMainBtn.classList.add('active');
@@ -841,8 +821,7 @@
                 subBtn.dataset.link = sub.link || '';
                 subBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    // ★ 切換子頁籤：重置標題列自動隱藏倒數
-                    resetHeaderAutoHide();
+                    // 切換子頁籤也不影響標題列狀態
                     document.querySelectorAll('.viewer-sub-tab').forEach(s => s.classList.remove('active'));
                     subBtn.classList.add('active');
                     saveSubTabMemory(projectCode, sub.id);
@@ -902,6 +881,9 @@
             subTabsWrapper.style.display = 'none';
             loadUrl(null);
         }
+
+        // ★ 首次初始化完成後，啟動「標題列 10 秒後自動隱藏」計時器（只啟動一次）
+        startInitialHeaderHideTimer();
     }
 
     // 關於視窗
@@ -936,6 +918,17 @@
         modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
     document.getElementById('aboutBtn').addEventListener('click', showAboutModal);
+
+    // ========== 啟動：參數處理與載入 ==========
+    const params = new URLSearchParams(window.location.search);
+    const projectCode = params.get('projectCode');
+    if (!projectCode) {
+        document.getElementById('viewerTitle').innerText = '❌ 缺少專案代碼';
+        document.getElementById('contentIframe').srcdoc = '<html><body style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">❌ 無效連結</body></html>';
+        startInitialHeaderHideTimer();
+    } else {
+        loadProject(projectCode);
+    }
 </script>
 </body>
 </html>
